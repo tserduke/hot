@@ -9,10 +9,11 @@ main = writeFile "../src/Data/MonoTuple/Base.hs" (baseModule 10)
 
 baseModule :: Int -> Text
 baseModule n = runText $ do
-  "{-# LANGUAGE FunctionalDependencies, KindSignatures #-}"
+  "{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures #-}"
   ""
   "module Data.MonoTuple.Base where"
   ""
+  "import Data.Data (Data, Typeable)"
   "import GHC.TypeLits (Nat)"
   "\n"
   "class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
@@ -20,7 +21,7 @@ baseModule n = runText $ do
   ""
   TextM $ unlinesN2 n instanceTuple
   "\n"
-  TextM $ unlinesN n dataTuple
+  TextM $ unlinesN2 n dataTuple
   ""
 
 
@@ -34,7 +35,8 @@ mapAtCase :: Int -> Int -> Text
 mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ tupleConstr n f where
   f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
 
-dataTuple n =  "data Tuple" ++ show n +++ "a =" +++ tupleConstr n (const "!a")
+dataTuple n =  "data Tuple" ++ show n +++ "a =" +++ tupleConstr n (const "!a") ++>
+  "\tderiving (Data, Typeable)"
 
 tupleConstr :: Int -> (Int -> Text) -> Text
 tupleConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])

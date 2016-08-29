@@ -30,7 +30,8 @@ library
                       MultiParamTypeClasses
                       ScopedTypeVariables
                       TupleSections
-  other-extensions:   FunctionalDependencies
+  other-extensions:   DeriveDataTypeable
+                      FunctionalDependencies
                       KindSignatures
   ghc-options:        -O2 -Wall -fno-warn-tabs
 
