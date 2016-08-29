@@ -40,10 +40,12 @@ test-suite test
   type:               exitcode-stdio-1.0
   hs-source-dirs:     test
   main-is:            Test.hs
-  other-modules:
+  other-modules:      Data.MonoTupleTest
   build-depends:      base,
                       mono-tuple,
-                      test-framework,
+                      tasty,
+                      tasty-hunit,
+                      tasty-quickcheck,
                       QuickCheck
   default-language:   Haskell2010
   default-extensions:

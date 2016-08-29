@@ -6,7 +6,7 @@ import Data.MonoTuple
 
 
 benchTuple :: Benchmark
-benchTuple = bgroup "Generic"
+benchTuple = bgroup "MonoTuple"
   [ bgroup "elementAt"
     [ bench "impl" $ whnf (sum . map (elementAt t10)) [0 .. 9]
     , bench "matching" $ whnf (sum . map (elementAt10 t10)) [0 .. 9]

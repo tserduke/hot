@@ -7,8 +7,8 @@ import Data.MonoTupleBench
 
 
 main :: IO ()
-main = defaultMainWith config [
-  benchTuple
+main = defaultMainWith config
+  [ benchTuple
   ]
 
 config :: Config

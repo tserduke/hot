@@ -1,6 +1,11 @@
 module Main where
 
+import Test.Tasty
+
+import qualified Data.MonoTupleTest as MonoTuple
+
 
 main :: IO ()
-main = putStrLn "Test suite not yet implemented"
-
+main = defaultMain $ testGroup "Tests"
+  [ MonoTuple.tests
+  ]
