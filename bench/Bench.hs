@@ -8,7 +8,7 @@ import Data.MonoTuple.GenericBench
 
 main :: IO ()
 main = defaultMainWith config [
-  genericBench
+  benchGeneric
   ]
 
 config :: Config

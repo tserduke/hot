@@ -4,12 +4,12 @@ import Data.Data (Data, fromConstr, gmapQi, toConstr)
 
 
 {-# INLINE elementAt #-}
-elementAt :: (Data t, Data a) => t -> Int -> a
-elementAt x i = gmapQi i recast x
+elementAt :: (Data (t a), Data a) => t a -> Int -> a
+elementAt = gelementAt
 
-{-# INLINE elementAt1 #-}
-elementAt1 :: (Data (t a), Data a) => t a -> Int -> a
-elementAt1 = elementAt
+{-# INLINE gelementAt #-}
+gelementAt :: (Data t, Data a) => t -> Int -> a
+gelementAt x i = gmapQi i recast x
 
 
 {-# INLINE recast #-}
