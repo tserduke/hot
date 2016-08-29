@@ -42,7 +42,7 @@ mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ tupleConstr n f where
   f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
 
 dataTuple n =  "data Tuple" ++ show n +++ "a =" +++ tupleConstr n (const "!a") ++>
-  "\tderiving (Data, Typeable)"
+  "\tderiving (Eq, Ord, Read, Show, Data, Typeable)"
 
 tupleConstr :: Int -> (Int -> Text) -> Text
 tupleConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
