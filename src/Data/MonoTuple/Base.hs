@@ -6,12 +6,23 @@ import Data.Data (Data, Typeable)
 import GHC.TypeLits (Nat)
 
 
-class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where
-	mapAt :: (a -> a) -> t a -> Int -> t a
-
 class (Tuple t n, Data (t a), Data a) => TupleData t a n
 
 instance (Tuple Tuple1 n, Data a) => TupleData Tuple1 a n
+instance (Tuple Tuple2 n, Data a) => TupleData Tuple2 a n
+instance (Tuple Tuple3 n, Data a) => TupleData Tuple3 a n
+instance (Tuple Tuple4 n, Data a) => TupleData Tuple4 a n
+instance (Tuple Tuple5 n, Data a) => TupleData Tuple5 a n
+instance (Tuple Tuple6 n, Data a) => TupleData Tuple6 a n
+instance (Tuple Tuple7 n, Data a) => TupleData Tuple7 a n
+instance (Tuple Tuple8 n, Data a) => TupleData Tuple8 a n
+instance (Tuple Tuple9 n, Data a) => TupleData Tuple9 a n
+instance (Tuple Tuple10 n, Data a) => TupleData Tuple10 a n
+
+
+class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where
+	mapAt :: (a -> a) -> t a -> Int -> t a
+
 
 instance Tuple Tuple1 1 where
 	mapAt f (T1 x1) = \case

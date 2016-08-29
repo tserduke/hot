@@ -16,6 +16,10 @@ baseModule n = runText $ do
   "import Data.Data (Data, Typeable)"
   "import GHC.TypeLits (Nat)"
   "\n"
+  "class (Tuple t n, Data (t a), Data a) => TupleData t a n"
+  ""
+  TextM $ unlinesN n instanceTupleData
+  "\n"
   "class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
   "\n"
@@ -25,7 +29,9 @@ baseModule n = runText $ do
   ""
 
 
-instanceTuple, dataTuple :: Int -> Text
+instanceTupleData, instanceTuple, dataTuple :: Int -> Text
+instanceTupleData n = "instance (Tuple Tuple" ++ show n +++ "n, Data a) => TupleData Tuple" ++ show n +++ "a n"
+
 instanceTuple n = "instance Tuple Tuple" ++ show n +++ show n +++ "where" ++>
   "\tmapAt f (" ++ tupleConstr n (("x" ++) . show) ++ ") = \\case" ++>
   unlinesN n (mapAtCase n) ++>
