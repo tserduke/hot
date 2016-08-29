@@ -19,9 +19,9 @@ baseModule n = runText $ do
   "class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
   ""
-  TextM $ unlinesN2 n instanceTuple
+  TextM $ unlinesN1 n instanceTuple
   "\n"
-  TextM $ unlinesN2 n dataTuple
+  TextM $ unlinesN1 n dataTuple
   ""
 
 
@@ -42,9 +42,9 @@ tupleConstr :: Int -> (Int -> Text) -> Text
 tupleConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
 
 
-unlinesN, unlinesN2 :: Int -> (Int -> Text) -> Text
+unlinesN, unlinesN1 :: Int -> (Int -> Text) -> Text
 unlinesN n f = intercalate "\n" $ map f [1 .. n]
-unlinesN2 n f = intercalate "\n\n" $ map f [1 .. n]
+unlinesN1 n f = intercalate "\n\n" $ map f [1 .. n]
 
 (+++), (++>) :: Text -> Text -> Text
 x +++ y = x ++ " " ++ y
