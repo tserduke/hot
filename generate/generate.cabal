@@ -13,9 +13,11 @@ executable generate-mt
   default-extensions: BangPatterns
                       FlexibleContexts
                       FlexibleInstances
+                      GeneralizedNewtypeDeriving
                       LambdaCase
                       MultiParamTypeClasses
                       NoImplicitPrelude
+                      OverloadedStrings
                       ScopedTypeVariables
                       TupleSections
-  ghc-options:        -O2 -Wall -fno-warn-tabs
+  ghc-options:        -O2 -Wall -fno-warn-tabs -fno-warn-unused-do-bind
