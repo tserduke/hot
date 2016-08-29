@@ -4,37 +4,54 @@ import BasicPrelude
 
 
 main :: IO ()
-main = writeFile "../src/Data/MonoTuple/Base.hs" (runText $ baseModule 10)
+main = writeFile "../src/Data/MonoTuple/Base.hs" (baseModule 10)
 
 
-baseModule :: Int -> TextM
-baseModule n = do
+baseModule :: Int -> Text
+baseModule n = runText $ do
   "{-# LANGUAGE FunctionalDependencies, KindSignatures #-}"
   ""
   "module Data.MonoTuple.Base where"
   ""
   "import GHC.TypeLits (Nat)"
   "\n"
-  "class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t"
+  "class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
+  "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
   ""
-  definitions n instanceTuple
+  TextM $ unlinesN2 n instanceTuple
+  "\n"
+  TextM $ unlinesN n dataTuple
   ""
-  definitions n dataTuple
 
 
-instanceTuple, dataTuple :: Int -> [Text]
-instanceTuple n = ["instance Tuple Tuple", show n, " ", show n]
+instanceTuple, dataTuple :: Int -> Text
+instanceTuple n = "instance Tuple Tuple" ++ show n +++ show n +++ "where" ++>
+  "\tmapAt f (" ++ tupleConstr n (("x" ++) . show) ++ ") = \\case" ++>
+  unlinesN n (mapAtCase n) ++>
+  "\t\tn -> error $ \"Tuple" ++ show n ++ " mapAt \" ++ show n"
 
-dataTuple n = ["data Tuple", show n, " a = T", show n, " ", unwords $ take n $ repeat "!a"]
+mapAtCase :: Int -> Int -> Text
+mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ tupleConstr n f where
+  f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
+
+dataTuple n =  "data Tuple" ++ show n +++ "a =" +++ tupleConstr n (const "!a")
+
+tupleConstr :: Int -> (Int -> Text) -> Text
+tupleConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
 
 
-definitions :: Int -> (Int -> [Text]) -> TextM
-definitions n def = TextM $ unlines $ map (mconcat . def) [1 .. n]
+unlinesN, unlinesN2 :: Int -> (Int -> Text) -> Text
+unlinesN n f = intercalate "\n" $ map f [1 .. n]
+unlinesN2 n f = intercalate "\n\n" $ map f [1 .. n]
+
+(+++), (++>) :: Text -> Text -> Text
+x +++ y = x ++ " " ++ y
+x ++> y = x ++ "\n" ++ y
 
 
 type TextM = TextMonad ()
 newtype TextMonad a = TextM { runText :: Text }
-  deriving (IsString, Show)
+  deriving (IsString, Monoid, Show)
 
 instance Functor TextMonad where
   fmap = undefined
