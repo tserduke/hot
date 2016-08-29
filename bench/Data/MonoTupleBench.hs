@@ -1,13 +1,12 @@
-module Data.MonoTuple.GenericBench (benchGeneric) where
+module Data.MonoTupleBench (benchTuple) where
 
 import Criterion
 
-import Data.MonoTuple.Base
-import Data.MonoTuple.Generic
+import Data.MonoTuple
 
 
-benchGeneric :: Benchmark
-benchGeneric = bgroup "Generic"
+benchTuple :: Benchmark
+benchTuple = bgroup "Generic"
   [ bgroup "elementAt"
     [ bench "impl" $ whnf (sum . map (elementAt t10)) [0 .. 9]
     , bench "matching" $ whnf (sum . map (elementAt10 t10)) [0 .. 9]

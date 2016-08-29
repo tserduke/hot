@@ -3,12 +3,12 @@ module Main where
 import Criterion.Main
 import Criterion.Types
 
-import Data.MonoTuple.GenericBench
+import Data.MonoTupleBench
 
 
 main :: IO ()
 main = defaultMainWith config [
-  benchGeneric
+  benchTuple
   ]
 
 config :: Config
