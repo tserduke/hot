@@ -1,8 +1,8 @@
 resolver: lts-6.14
 packages:
-- '.'
+- .
+- generate
 extra-deps: []
 flags: {}
 extra-package-dbs: []
 system-ghc: false
-
