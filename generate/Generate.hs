@@ -18,7 +18,7 @@ baseModule n = runText $ do
   "\n"
   "class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
-  ""
+  "\n"
   TextM $ unlinesN1 n instanceTuple
   "\n"
   TextM $ unlinesN1 n dataTuple

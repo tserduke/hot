@@ -30,6 +30,7 @@ library
                       MultiParamTypeClasses
                       ScopedTypeVariables
                       TupleSections
+                      TypeOperators
   other-extensions:   DeriveDataTypeable
                       FunctionalDependencies
                       KindSignatures
@@ -65,6 +66,7 @@ benchmark bench
                       MultiParamTypeClasses
                       ScopedTypeVariables
                       TupleSections
+                      TypeOperators
   ghc-options:        -O2 -Wall -fno-warn-tabs
 
 source-repository head

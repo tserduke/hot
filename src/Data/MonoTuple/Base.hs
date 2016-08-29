@@ -9,6 +9,10 @@ import GHC.TypeLits (Nat)
 class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where
 	mapAt :: (a -> a) -> t a -> Int -> t a
 
+class (Tuple t n, Data (t a), Data a) => TupleData t a n
+
+instance (Tuple Tuple1 n, Data a) => TupleData Tuple1 a n
+
 instance Tuple Tuple1 1 where
 	mapAt f (T1 x1) = \case
 		0 -> T1 (f x1)

@@ -1,12 +1,18 @@
 module Data.MonoTuple
   ( module Base
+  , module TypeLits
   , elementAt
+  , merge
   ) where
 
-import Data.Data (Data)
 import Data.MonoTuple.Base as Base
 import qualified Data.MonoTuple.Generic as G
+import GHC.TypeLits as TypeLits
 
 
-elementAt :: (Data (t a), Data a) => t a -> Int -> a
+elementAt :: (TupleData t a n) => t a -> Int -> a
 elementAt = G.elementAt
+
+
+merge :: (TupleData t1 a n, TupleData t2 a m, TupleData t a (n + m), Ord a) => t1 a -> t2 a -> t a
+merge = G.merge undefined
