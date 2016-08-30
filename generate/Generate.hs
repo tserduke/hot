@@ -22,6 +22,7 @@ baseModule n = runLines $ do
   "\n"
   "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   tab 1 "size :: t a -> Int"
+  tab 1 "elementAt :: t a -> Int -> a"
   tab 1 "mapAt :: (a -> a) -> t a -> Int -> t a"
   "\n"
   forN n instanceHot
@@ -35,10 +36,17 @@ instanceHotData n = Line $ "instance (Hot Hot" ++ show n +++ "n, Data a) => HotD
 instanceHot n = do
   Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
   tab 1 $ "size _ =" +++ show n
-  tab 1 $ "mapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case"
+  let constr = "(" ++ hotConstr n (("x" ++) . show) ++ ")"
+  tab 1 $ "elementAt" +++ constr +++ "= \\case"
+  forN n elementAtCase
+  tab 2 $ "n -> error $ \"Hot" ++ show n ++ " elementAt \" ++ show n"
+  tab 1 $ "mapAt f" +++ constr +++ "= \\case"
   forN n (mapAtCase n)
   tab 2 $ "n -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
   ""
+
+elementAtCase :: Int -> Line ()
+elementAtCase i = tab 2 $ show (i - 1) +++ "-> x" ++ show i
 
 mapAtCase :: Int -> Int -> Line ()
 mapAtCase n i = tab 2 $ show (i - 1) +++ "->" +++ hotConstr n f where

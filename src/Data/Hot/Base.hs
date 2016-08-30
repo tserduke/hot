@@ -22,17 +22,25 @@ instance (Hot Hot10 n, Data a) => HotData Hot10 a n
 
 class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where
 	size :: t a -> Int
+	elementAt :: t a -> Int -> a
 	mapAt :: (a -> a) -> t a -> Int -> t a
 
 
 instance Hot Hot1 1 where
 	size _ = 1
+	elementAt (Hot1 x1) = \case
+		0 -> x1
+		n -> error $ "Hot1 elementAt " ++ show n
 	mapAt f (Hot1 x1) = \case
 		0 -> Hot1 (f x1)
 		n -> error $ "Hot1 mapAt " ++ show n
 
 instance Hot Hot2 2 where
 	size _ = 2
+	elementAt (Hot2 x1 x2) = \case
+		0 -> x1
+		1 -> x2
+		n -> error $ "Hot2 elementAt " ++ show n
 	mapAt f (Hot2 x1 x2) = \case
 		0 -> Hot2 (f x1) x2
 		1 -> Hot2 x1 (f x2)
@@ -40,6 +48,11 @@ instance Hot Hot2 2 where
 
 instance Hot Hot3 3 where
 	size _ = 3
+	elementAt (Hot3 x1 x2 x3) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		n -> error $ "Hot3 elementAt " ++ show n
 	mapAt f (Hot3 x1 x2 x3) = \case
 		0 -> Hot3 (f x1) x2 x3
 		1 -> Hot3 x1 (f x2) x3
@@ -48,6 +61,12 @@ instance Hot Hot3 3 where
 
 instance Hot Hot4 4 where
 	size _ = 4
+	elementAt (Hot4 x1 x2 x3 x4) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		3 -> x4
+		n -> error $ "Hot4 elementAt " ++ show n
 	mapAt f (Hot4 x1 x2 x3 x4) = \case
 		0 -> Hot4 (f x1) x2 x3 x4
 		1 -> Hot4 x1 (f x2) x3 x4
@@ -57,6 +76,13 @@ instance Hot Hot4 4 where
 
 instance Hot Hot5 5 where
 	size _ = 5
+	elementAt (Hot5 x1 x2 x3 x4 x5) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		3 -> x4
+		4 -> x5
+		n -> error $ "Hot5 elementAt " ++ show n
 	mapAt f (Hot5 x1 x2 x3 x4 x5) = \case
 		0 -> Hot5 (f x1) x2 x3 x4 x5
 		1 -> Hot5 x1 (f x2) x3 x4 x5
@@ -67,6 +93,14 @@ instance Hot Hot5 5 where
 
 instance Hot Hot6 6 where
 	size _ = 6
+	elementAt (Hot6 x1 x2 x3 x4 x5 x6) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		3 -> x4
+		4 -> x5
+		5 -> x6
+		n -> error $ "Hot6 elementAt " ++ show n
 	mapAt f (Hot6 x1 x2 x3 x4 x5 x6) = \case
 		0 -> Hot6 (f x1) x2 x3 x4 x5 x6
 		1 -> Hot6 x1 (f x2) x3 x4 x5 x6
@@ -78,6 +112,15 @@ instance Hot Hot6 6 where
 
 instance Hot Hot7 7 where
 	size _ = 7
+	elementAt (Hot7 x1 x2 x3 x4 x5 x6 x7) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		3 -> x4
+		4 -> x5
+		5 -> x6
+		6 -> x7
+		n -> error $ "Hot7 elementAt " ++ show n
 	mapAt f (Hot7 x1 x2 x3 x4 x5 x6 x7) = \case
 		0 -> Hot7 (f x1) x2 x3 x4 x5 x6 x7
 		1 -> Hot7 x1 (f x2) x3 x4 x5 x6 x7
@@ -90,6 +133,16 @@ instance Hot Hot7 7 where
 
 instance Hot Hot8 8 where
 	size _ = 8
+	elementAt (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		3 -> x4
+		4 -> x5
+		5 -> x6
+		6 -> x7
+		7 -> x8
+		n -> error $ "Hot8 elementAt " ++ show n
 	mapAt f (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = \case
 		0 -> Hot8 (f x1) x2 x3 x4 x5 x6 x7 x8
 		1 -> Hot8 x1 (f x2) x3 x4 x5 x6 x7 x8
@@ -103,6 +156,17 @@ instance Hot Hot8 8 where
 
 instance Hot Hot9 9 where
 	size _ = 9
+	elementAt (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		3 -> x4
+		4 -> x5
+		5 -> x6
+		6 -> x7
+		7 -> x8
+		8 -> x9
+		n -> error $ "Hot9 elementAt " ++ show n
 	mapAt f (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = \case
 		0 -> Hot9 (f x1) x2 x3 x4 x5 x6 x7 x8 x9
 		1 -> Hot9 x1 (f x2) x3 x4 x5 x6 x7 x8 x9
@@ -117,6 +181,18 @@ instance Hot Hot9 9 where
 
 instance Hot Hot10 10 where
 	size _ = 10
+	elementAt (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = \case
+		0 -> x1
+		1 -> x2
+		2 -> x3
+		3 -> x4
+		4 -> x5
+		5 -> x6
+		6 -> x7
+		7 -> x8
+		8 -> x9
+		9 -> x10
+		n -> error $ "Hot10 elementAt " ++ show n
 	mapAt f (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = \case
 		0 -> Hot10 (f x1) x2 x3 x4 x5 x6 x7 x8 x9 x10
 		1 -> Hot10 x1 (f x2) x3 x4 x5 x6 x7 x8 x9 x10
