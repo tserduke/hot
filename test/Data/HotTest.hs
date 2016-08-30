@@ -1,9 +1,9 @@
-module Data.MonoTupleTest (tests) where
+module Data.HotTest (tests) where
 
 import Test.Tasty
 import Test.Tasty.HUnit
 
-import Data.MonoTuple
+import Data.Hot
 
 
 tests :: TestTree

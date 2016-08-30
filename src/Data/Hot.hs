@@ -1,4 +1,4 @@
-module Data.MonoTuple
+module Data.Hot
   ( module Base
   , module TypeLits
   , elementAt
@@ -6,8 +6,8 @@ module Data.MonoTuple
   ) where
 
 import Data.Data (toConstr)
-import Data.MonoTuple.Base as Base
-import qualified Data.MonoTuple.Generic as G
+import Data.Hot.Base as Base
+import qualified Data.Hot.Generic as G
 import GHC.TypeLits as TypeLits
 
 

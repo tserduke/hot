@@ -2,7 +2,7 @@ module Main where
 
 import Test.Tasty
 
-import qualified Data.MonoTupleTest as Tuple
+import qualified Data.HotTest as Tuple
 
 
 main :: IO ()

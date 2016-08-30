@@ -3,7 +3,7 @@ module Main where
 import Criterion.Main
 import Criterion.Types
 
-import Data.MonoTupleBench
+import Data.HotBench
 
 
 main :: IO ()

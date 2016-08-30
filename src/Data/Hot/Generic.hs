@@ -1,4 +1,4 @@
-module Data.MonoTuple.Generic
+module Data.Hot.Generic
   ( recast
   , elementAt
   , merge

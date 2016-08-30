@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures #-}
 
-module Data.MonoTuple.Base where
+module Data.Hot.Base where
 
 import Data.Data (Data, Typeable)
 import Data.Proxy (Proxy (Proxy))

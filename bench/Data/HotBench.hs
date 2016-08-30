@@ -1,9 +1,9 @@
-module Data.MonoTupleBench (benchTuple) where
+module Data.HotBench (benchTuple) where
 
 import Criterion
 
 import qualified Data.List.Extra as L
-import Data.MonoTuple
+import Data.Hot
 
 
 benchTuple :: Benchmark
