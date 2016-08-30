@@ -1,6 +1,7 @@
 module Main (main) where
 
 import BasicPrelude
+import qualified Data.Text as T
 
 
 main :: IO ()
@@ -9,7 +10,7 @@ main = writeFile "../src/Data/Hot/Base.hs" (baseModule 10)
 
 baseModule :: Int -> Text
 baseModule n = runLines $ do
-  "{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures #-}"
+  "{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures, Rank2Types #-}"
   ""
   "module Data.Hot.Base where"
   ""
@@ -22,6 +23,7 @@ baseModule n = runLines $ do
   forN n instanceHotData
   "\n"
   "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
+  tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)"
   tab 1 "size :: t a -> Int"
   tab 1 "elementAt :: t a -> Int -> a"
   tab 1 "mapAt :: (a -> a) -> t a -> Int -> t a"
@@ -36,6 +38,7 @@ instanceHotData n = Line $ "instance (Hot Hot" ++ show n +++ "n, Data a) => HotD
 
 instanceHot n = do
   Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
+  tab 1 $ "unfold f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
   tab 1 $ "size _ =" +++ show n
   let constr = "(" ++ hotConstr n (("x" ++) . show) ++ ")"
   tab 1 $ "elementAt" +++ constr +++ "= \\case"
@@ -69,7 +72,7 @@ forN n f = foldr1 (>>) $ map f [1 .. n]
 x +++ y = x ++ " " ++ y
 
 tab :: Int -> Text -> Line ()
-tab n x = Line $ (mconcat $ take n $ repeat "\t") ++ x
+tab n x = Line $ T.replicate n "\t" ++ x
 
 
 newtype Line a = Line { runLines :: Text }

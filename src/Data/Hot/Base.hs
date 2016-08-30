@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures #-}
+{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures, Rank2Types #-}
 
 module Data.Hot.Base where
 
@@ -22,12 +22,14 @@ instance (Hot Hot10 n, Data a) => HotData Hot10 a n
 
 
 class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where
+	unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)
 	size :: t a -> Int
 	elementAt :: t a -> Int -> a
 	mapAt :: (a -> a) -> t a -> Int -> t a
 
 
 instance Hot Hot1 1 where
+	unfold f z = f (z Hot1)
 	size _ = 1
 	elementAt (Hot1 x1) = \case
 		0 -> x1
@@ -37,6 +39,7 @@ instance Hot Hot1 1 where
 		n -> hotError 1 "mapAt" n
 
 instance Hot Hot2 2 where
+	unfold f z = f (f (z Hot2))
 	size _ = 2
 	elementAt (Hot2 x1 x2) = \case
 		0 -> x1
@@ -48,6 +51,7 @@ instance Hot Hot2 2 where
 		n -> hotError 2 "mapAt" n
 
 instance Hot Hot3 3 where
+	unfold f z = f (f (f (z Hot3)))
 	size _ = 3
 	elementAt (Hot3 x1 x2 x3) = \case
 		0 -> x1
@@ -61,6 +65,7 @@ instance Hot Hot3 3 where
 		n -> hotError 3 "mapAt" n
 
 instance Hot Hot4 4 where
+	unfold f z = f (f (f (f (z Hot4))))
 	size _ = 4
 	elementAt (Hot4 x1 x2 x3 x4) = \case
 		0 -> x1
@@ -76,6 +81,7 @@ instance Hot Hot4 4 where
 		n -> hotError 4 "mapAt" n
 
 instance Hot Hot5 5 where
+	unfold f z = f (f (f (f (f (z Hot5)))))
 	size _ = 5
 	elementAt (Hot5 x1 x2 x3 x4 x5) = \case
 		0 -> x1
@@ -93,6 +99,7 @@ instance Hot Hot5 5 where
 		n -> hotError 5 "mapAt" n
 
 instance Hot Hot6 6 where
+	unfold f z = f (f (f (f (f (f (z Hot6))))))
 	size _ = 6
 	elementAt (Hot6 x1 x2 x3 x4 x5 x6) = \case
 		0 -> x1
@@ -112,6 +119,7 @@ instance Hot Hot6 6 where
 		n -> hotError 6 "mapAt" n
 
 instance Hot Hot7 7 where
+	unfold f z = f (f (f (f (f (f (f (z Hot7)))))))
 	size _ = 7
 	elementAt (Hot7 x1 x2 x3 x4 x5 x6 x7) = \case
 		0 -> x1
@@ -133,6 +141,7 @@ instance Hot Hot7 7 where
 		n -> hotError 7 "mapAt" n
 
 instance Hot Hot8 8 where
+	unfold f z = f (f (f (f (f (f (f (f (z Hot8))))))))
 	size _ = 8
 	elementAt (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = \case
 		0 -> x1
@@ -156,6 +165,7 @@ instance Hot Hot8 8 where
 		n -> hotError 8 "mapAt" n
 
 instance Hot Hot9 9 where
+	unfold f z = f (f (f (f (f (f (f (f (f (z Hot9)))))))))
 	size _ = 9
 	elementAt (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = \case
 		0 -> x1
@@ -181,6 +191,7 @@ instance Hot Hot9 9 where
 		n -> hotError 9 "mapAt" n
 
 instance Hot Hot10 10 where
+	unfold f z = f (f (f (f (f (f (f (f (f (f (z Hot10))))))))))
 	size _ = 10
 	elementAt (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = \case
 		0 -> x1
