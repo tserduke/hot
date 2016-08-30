@@ -38,12 +38,16 @@ instanceHotData n = Line $ "instance (Hot Hot" ++ show n +++ "n, Data a) => HotD
 
 instanceHot n = do
   Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
+  tab 1 $ "{-# INLINABLE unfold #-}"
   tab 1 $ "unfold f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
+  tab 1 $ "{-# INLINE size #-}"
   tab 1 $ "size _ =" +++ show n
   let constr = "(" ++ hotConstr n (("x" ++) . show) ++ ")"
+  tab 1 $ "{-# INLINABLE elementAt #-}"
   tab 1 $ "elementAt" +++ constr +++ "= \\case"
   forN n elementAtCase
   tab 2 $ "n -> hotError" +++ show n +++ "\"elementAt\" n"
+  tab 1 $ "{-# INLINABLE mapAt #-}"
   tab 1 $ "mapAt f" +++ constr +++ "= \\case"
   forN n (mapAtCase n)
   tab 2 $ "n -> hotError" +++ show n +++ "\"mapAt\" n"

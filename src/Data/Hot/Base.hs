@@ -29,35 +29,47 @@ class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where
 
 
 instance Hot Hot1 1 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (z Hot1)
+	{-# INLINE size #-}
 	size _ = 1
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot1 x1) = \case
 		0 -> x1
 		n -> hotError 1 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot1 x1) = \case
 		0 -> Hot1 (f x1)
 		n -> hotError 1 "mapAt" n
 
 instance Hot Hot2 2 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (z Hot2))
+	{-# INLINE size #-}
 	size _ = 2
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot2 x1 x2) = \case
 		0 -> x1
 		1 -> x2
 		n -> hotError 2 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot2 x1 x2) = \case
 		0 -> Hot2 (f x1) x2
 		1 -> Hot2 x1 (f x2)
 		n -> hotError 2 "mapAt" n
 
 instance Hot Hot3 3 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (z Hot3)))
+	{-# INLINE size #-}
 	size _ = 3
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot3 x1 x2 x3) = \case
 		0 -> x1
 		1 -> x2
 		2 -> x3
 		n -> hotError 3 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot3 x1 x2 x3) = \case
 		0 -> Hot3 (f x1) x2 x3
 		1 -> Hot3 x1 (f x2) x3
@@ -65,14 +77,18 @@ instance Hot Hot3 3 where
 		n -> hotError 3 "mapAt" n
 
 instance Hot Hot4 4 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (f (z Hot4))))
+	{-# INLINE size #-}
 	size _ = 4
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot4 x1 x2 x3 x4) = \case
 		0 -> x1
 		1 -> x2
 		2 -> x3
 		3 -> x4
 		n -> hotError 4 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot4 x1 x2 x3 x4) = \case
 		0 -> Hot4 (f x1) x2 x3 x4
 		1 -> Hot4 x1 (f x2) x3 x4
@@ -81,8 +97,11 @@ instance Hot Hot4 4 where
 		n -> hotError 4 "mapAt" n
 
 instance Hot Hot5 5 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (f (f (z Hot5)))))
+	{-# INLINE size #-}
 	size _ = 5
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot5 x1 x2 x3 x4 x5) = \case
 		0 -> x1
 		1 -> x2
@@ -90,6 +109,7 @@ instance Hot Hot5 5 where
 		3 -> x4
 		4 -> x5
 		n -> hotError 5 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot5 x1 x2 x3 x4 x5) = \case
 		0 -> Hot5 (f x1) x2 x3 x4 x5
 		1 -> Hot5 x1 (f x2) x3 x4 x5
@@ -99,8 +119,11 @@ instance Hot Hot5 5 where
 		n -> hotError 5 "mapAt" n
 
 instance Hot Hot6 6 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (f (f (f (z Hot6))))))
+	{-# INLINE size #-}
 	size _ = 6
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot6 x1 x2 x3 x4 x5 x6) = \case
 		0 -> x1
 		1 -> x2
@@ -109,6 +132,7 @@ instance Hot Hot6 6 where
 		4 -> x5
 		5 -> x6
 		n -> hotError 6 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot6 x1 x2 x3 x4 x5 x6) = \case
 		0 -> Hot6 (f x1) x2 x3 x4 x5 x6
 		1 -> Hot6 x1 (f x2) x3 x4 x5 x6
@@ -119,8 +143,11 @@ instance Hot Hot6 6 where
 		n -> hotError 6 "mapAt" n
 
 instance Hot Hot7 7 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (z Hot7)))))))
+	{-# INLINE size #-}
 	size _ = 7
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot7 x1 x2 x3 x4 x5 x6 x7) = \case
 		0 -> x1
 		1 -> x2
@@ -130,6 +157,7 @@ instance Hot Hot7 7 where
 		5 -> x6
 		6 -> x7
 		n -> hotError 7 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot7 x1 x2 x3 x4 x5 x6 x7) = \case
 		0 -> Hot7 (f x1) x2 x3 x4 x5 x6 x7
 		1 -> Hot7 x1 (f x2) x3 x4 x5 x6 x7
@@ -141,8 +169,11 @@ instance Hot Hot7 7 where
 		n -> hotError 7 "mapAt" n
 
 instance Hot Hot8 8 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (f (z Hot8))))))))
+	{-# INLINE size #-}
 	size _ = 8
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = \case
 		0 -> x1
 		1 -> x2
@@ -153,6 +184,7 @@ instance Hot Hot8 8 where
 		6 -> x7
 		7 -> x8
 		n -> hotError 8 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = \case
 		0 -> Hot8 (f x1) x2 x3 x4 x5 x6 x7 x8
 		1 -> Hot8 x1 (f x2) x3 x4 x5 x6 x7 x8
@@ -165,8 +197,11 @@ instance Hot Hot8 8 where
 		n -> hotError 8 "mapAt" n
 
 instance Hot Hot9 9 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (f (f (z Hot9)))))))))
+	{-# INLINE size #-}
 	size _ = 9
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = \case
 		0 -> x1
 		1 -> x2
@@ -178,6 +213,7 @@ instance Hot Hot9 9 where
 		7 -> x8
 		8 -> x9
 		n -> hotError 9 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = \case
 		0 -> Hot9 (f x1) x2 x3 x4 x5 x6 x7 x8 x9
 		1 -> Hot9 x1 (f x2) x3 x4 x5 x6 x7 x8 x9
@@ -191,8 +227,11 @@ instance Hot Hot9 9 where
 		n -> hotError 9 "mapAt" n
 
 instance Hot Hot10 10 where
+	{-# INLINABLE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (f (f (f (z Hot10))))))))))
+	{-# INLINE size #-}
 	size _ = 10
+	{-# INLINABLE elementAt #-}
 	elementAt (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = \case
 		0 -> x1
 		1 -> x2
@@ -205,6 +244,7 @@ instance Hot Hot10 10 where
 		8 -> x9
 		9 -> x10
 		n -> hotError 10 "elementAt" n
+	{-# INLINABLE mapAt #-}
 	mapAt f (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = \case
 		0 -> Hot10 (f x1) x2 x3 x4 x5 x6 x7 x8 x9 x10
 		1 -> Hot10 x1 (f x2) x3 x4 x5 x6 x7 x8 x9 x10
