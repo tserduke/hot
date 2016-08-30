@@ -8,7 +8,7 @@ import Data.HotBench
 
 main :: IO ()
 main = defaultMainWith config
-  [ benchTuple
+  [ benchHot
   ]
 
 config :: Config
