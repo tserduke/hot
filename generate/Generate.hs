@@ -50,7 +50,7 @@ dataHot n = do
   ""
 
 hotConstr :: Int -> (Int -> Text) -> Text
-hotConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
+hotConstr n f = "Hot" ++ show n +++ unwords (map f [1 .. n])
 
 
 forN :: (Monad m) => Int -> (Int -> m a) -> m a
