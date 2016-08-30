@@ -2,8 +2,8 @@ name:                 hot
 version:              0.1.0
 synopsis:             Homogeneous Tuples
 description:          Please see README.md
-homepage:             https://github.com/tserduke/mono-tuple
-bug-reports:          https://github.com/tserduke/mono-tuple/issues
+homepage:             https://github.com/tserduke/hot
+bug-reports:          https://github.com/tserduke/hot/issues
 license:              BSD3
 license-file:         LICENSE
 author:               Taras Serduke
@@ -16,9 +16,9 @@ cabal-version:        >= 1.10
 
 library
   hs-source-dirs:     src
-  exposed-modules:    Data.MonoTuple
-                      Data.MonoTuple.Base
-                      Data.MonoTuple.Generic
+  exposed-modules:    Data.Hot
+                      Data.Hot.Base
+                      Data.Hot.Generic
   other-modules:
   build-depends:      base
   default-language:   Haskell2010
@@ -40,7 +40,7 @@ test-suite test
   type:               exitcode-stdio-1.0
   hs-source-dirs:     test
   main-is:            Test.hs
-  other-modules:      Data.MonoTupleTest
+  other-modules:      Data.HotTest
   build-depends:      base,
                       hot,
                       tasty,
@@ -54,7 +54,7 @@ benchmark bench
   type:               exitcode-stdio-1.0
   hs-source-dirs:     bench
   main-is:            Bench.hs
-  other-modules:      Data.MonoTupleBench
+  other-modules:      Data.HotBench
   build-depends:      base,
                       criterion,
                       extra,
@@ -73,4 +73,4 @@ benchmark bench
 
 source-repository head
   type:     git
-  location: https://github.com/tserduke/mono-tuple
+  location: https://github.com/tserduke/hot.git
