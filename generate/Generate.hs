@@ -14,6 +14,7 @@ baseModule n = runLines $ do
   "module Data.Hot.Base where"
   ""
   "import Data.Data (Data, Typeable)"
+  "import Data.Hot.Internal (hotError)"
   "import GHC.TypeLits (Nat)"
   "\n"
   "class (Hot t n, Data (t a), Data a) => HotData t a n"
@@ -39,10 +40,10 @@ instanceHot n = do
   let constr = "(" ++ hotConstr n (("x" ++) . show) ++ ")"
   tab 1 $ "elementAt" +++ constr +++ "= \\case"
   forN n elementAtCase
-  tab 2 $ "n -> error $ \"Hot" ++ show n ++ " elementAt \" ++ show n"
+  tab 2 $ "n -> hotError" +++ show n +++ "\"elementAt\" n"
   tab 1 $ "mapAt f" +++ constr +++ "= \\case"
   forN n (mapAtCase n)
-  tab 2 $ "n -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
+  tab 2 $ "n -> hotError" +++ show n +++ "\"mapAt\" n"
   ""
 
 elementAtCase :: Int -> Line ()
