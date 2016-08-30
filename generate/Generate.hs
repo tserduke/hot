@@ -8,7 +8,7 @@ main = writeFile "../src/Data/Hot/Base.hs" (baseModule 10)
 
 
 baseModule :: Int -> Text
-baseModule n = runText $ do
+baseModule n = runLine $ do
   "{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures #-}"
   ""
   "module Data.Hot.Base where"
@@ -18,15 +18,15 @@ baseModule n = runText $ do
   "\n"
   "class (Hot t n, Data (t a), Data a) => HotData t a n"
   ""
-  TextM $ unlinesN n instanceHotData
+  Line $ unlinesN n instanceHotData
   "\n"
   "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   "\t" ++ "size :: t a -> Int"
   "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
   "\n"
-  TextM $ unlinesN1 n instanceHot
+  Line $ unlinesN1 n instanceHot
   "\n"
-  TextM $ unlinesN1 n dataHot
+  Line $ unlinesN1 n dataHot
   ""
 
 
@@ -59,17 +59,16 @@ x +++ y = x ++ " " ++ y
 x ++> y = x ++ "\n" ++ y
 
 
-type TextM = TextMonad ()
-newtype TextMonad a = TextM { runText :: Text }
-  deriving (IsString, Monoid, Show)
+newtype Line a = Line { runLine :: Text }
+  deriving (IsString, Monoid)
 
-instance Functor TextMonad where
+instance Functor Line where
   fmap = undefined
 
-instance Applicative TextMonad where
+instance Applicative Line where
   pure = undefined
   (<*>) = undefined
 
-instance Monad TextMonad where
+instance Monad Line where
   (>>=) = undefined
-  (TextM x) >> (TextM y) = TextM $ x ++ "\n" ++ y
+  (Line x) >> (Line y) = Line $ x ++ "\n" ++ y
