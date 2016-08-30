@@ -8,7 +8,7 @@ main = writeFile "../src/Data/Hot/Base.hs" (baseModule 10)
 
 
 baseModule :: Int -> Text
-baseModule n = runLine $ do
+baseModule n = runLines $ do
   "{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures #-}"
   ""
   "module Data.Hot.Base where"
@@ -33,18 +33,20 @@ baseModule n = runLine $ do
 instanceHotData, instanceHot, dataHot :: Int -> Text
 instanceHotData n = "instance (Hot Hot" ++ show n +++ "n, Data a) => HotData Hot" ++ show n +++ "a n"
 
-instanceHot n = "instance Hot Hot" ++ show n +++ show n +++ "where" ++>
-  "\t" ++ "size _ =" +++ show n ++>
-  "\t" ++ "mapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case" ++>
-  unlinesN n (mapAtCase n) ++>
-  "\t\t" ++ "n -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
+instanceHot n = runLines $ do
+  Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
+  Line $ "\t" ++ "size _ =" +++ show n
+  Line $ "\t" ++ "mapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case"
+  Line $ unlinesN n (mapAtCase n)
+  Line $ "\t\t" ++ "n -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
 
 mapAtCase :: Int -> Int -> Text
 mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ hotConstr n f where
   f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
 
-dataHot n =  "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a") ++>
-  "\t" ++ "deriving (Eq, Ord, Read, Show, Data, Typeable)"
+dataHot n = runLines $ do
+  Line $ "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a")
+  Line $ "\t" ++ "deriving (Eq, Ord, Read, Show, Data, Typeable)"
 
 hotConstr :: Int -> (Int -> Text) -> Text
 hotConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
@@ -54,12 +56,11 @@ unlinesN, unlinesN1 :: Int -> (Int -> Text) -> Text
 unlinesN n f = intercalate "\n" $ map f [1 .. n]
 unlinesN1 n f = intercalate "\n\n" $ map f [1 .. n]
 
-(+++), (++>) :: Text -> Text -> Text
+(+++) :: Text -> Text -> Text
 x +++ y = x ++ " " ++ y
-x ++> y = x ++ "\n" ++ y
 
 
-newtype Line a = Line { runLine :: Text }
+newtype Line a = Line { runLines :: Text }
   deriving (IsString, Monoid)
 
 instance Functor Line where
