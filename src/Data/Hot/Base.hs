@@ -1,24 +1,9 @@
-{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures, Rank2Types #-}
+{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types #-}
 
 module Data.Hot.Base where
 
-import Data.Data (Data, Typeable)
 import Data.Hot.Internal (hotError)
 import GHC.TypeLits (Nat)
-
-
-class (Hot t n, Data (t a), Data a) => HotData t a n
-
-instance (Hot Hot1 n, Data a) => HotData Hot1 a n
-instance (Hot Hot2 n, Data a) => HotData Hot2 a n
-instance (Hot Hot3 n, Data a) => HotData Hot3 a n
-instance (Hot Hot4 n, Data a) => HotData Hot4 a n
-instance (Hot Hot5 n, Data a) => HotData Hot5 a n
-instance (Hot Hot6 n, Data a) => HotData Hot6 a n
-instance (Hot Hot7 n, Data a) => HotData Hot7 a n
-instance (Hot Hot8 n, Data a) => HotData Hot8 a n
-instance (Hot Hot9 n, Data a) => HotData Hot9 a n
-instance (Hot Hot10 n, Data a) => HotData Hot10 a n
 
 
 class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where
@@ -260,31 +245,31 @@ instance Hot Hot10 10 where
 
 
 data Hot1 a = Hot1 !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot2 a = Hot2 !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot3 a = Hot3 !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot4 a = Hot4 !a !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot5 a = Hot5 !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot6 a = Hot6 !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot7 a = Hot7 !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot8 a = Hot8 !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot9 a = Hot9 !a !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)
 
 data Hot10 a = Hot10 !a !a !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show, Data, Typeable)
+	deriving (Eq, Ord, Read, Show)

@@ -31,8 +31,7 @@ library
                       ScopedTypeVariables
                       TupleSections
                       TypeOperators
-  other-extensions:   DeriveDataTypeable
-                      FunctionalDependencies
+  other-extensions:   FunctionalDependencies
                       KindSignatures
                       Rank2Types
   ghc-options:        -O2 -Wall -fno-warn-tabs

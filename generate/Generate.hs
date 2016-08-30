@@ -10,17 +10,12 @@ main = writeFile "../src/Data/Hot/Base.hs" (baseModule 10)
 
 baseModule :: Int -> Text
 baseModule n = runLines $ do
-  "{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures, Rank2Types #-}"
+  "{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types #-}"
   ""
   "module Data.Hot.Base where"
   ""
-  "import Data.Data (Data, Typeable)"
   "import Data.Hot.Internal (hotError)"
   "import GHC.TypeLits (Nat)"
-  "\n"
-  "class (Hot t n, Data (t a), Data a) => HotData t a n"
-  ""
-  forN n instanceHotData
   "\n"
   "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)"
@@ -33,9 +28,7 @@ baseModule n = runLines $ do
   forN n dataHot
 
 
-instanceHotData, instanceHot, dataHot :: Int -> Line ()
-instanceHotData n = Line $ "instance (Hot Hot" ++ show n +++ "n, Data a) => HotData Hot" ++ show n +++ "a n"
-
+instanceHot, elementAtCase, dataHot :: Int -> Line ()
 instanceHot n = do
   Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
   tab 1 $ "{-# INLINABLE unfold #-}"
@@ -53,7 +46,6 @@ instanceHot n = do
   tab 2 $ "n -> hotError" +++ show n +++ "\"mapAt\" n"
   ""
 
-elementAtCase :: Int -> Line ()
 elementAtCase i = tab 2 $ show (i - 1) +++ "-> x" ++ show i
 
 mapAtCase :: Int -> Int -> Line ()
@@ -62,7 +54,7 @@ mapAtCase n i = tab 2 $ show (i - 1) +++ "->" +++ hotConstr n f where
 
 dataHot n = do
   Line $ "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a")
-  tab 1 $ "deriving (Eq, Ord, Read, Show, Data, Typeable)"
+  tab 1 $ "deriving (Eq, Ord, Read, Show)"
   ""
 
 hotConstr :: Int -> (Int -> Text) -> Text
