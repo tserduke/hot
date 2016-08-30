@@ -1,6 +1,6 @@
-name:                 mono-tuple
+name:                 hot
 version:              0.1.0
-synopsis:             Monomorphic Tuples
+synopsis:             Homogeneous Tuples
 description:          Please see README.md
 homepage:             https://github.com/tserduke/mono-tuple
 bug-reports:          https://github.com/tserduke/mono-tuple/issues
@@ -42,7 +42,7 @@ test-suite test
   main-is:            Test.hs
   other-modules:      Data.MonoTupleTest
   build-depends:      base,
-                      mono-tuple,
+                      hot,
                       tasty,
                       tasty-hunit,
                       tasty-quickcheck
@@ -58,7 +58,7 @@ benchmark bench
   build-depends:      base,
                       criterion,
                       extra,
-                      mono-tuple
+                      hot
   default-language:   Haskell2010
   default-extensions: BangPatterns
                       FlexibleContexts
