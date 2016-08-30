@@ -21,8 +21,8 @@ baseModule n = runLines $ do
   Line $ unlinesN n instanceHotData
   "\n"
   "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
-  "\t" ++ "size :: t a -> Int"
-  "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
+  tab 1 "size :: t a -> Int"
+  tab 1 "mapAt :: (a -> a) -> t a -> Int -> t a"
   "\n"
   Line $ unlinesN1 n instanceHot
   "\n"
@@ -35,10 +35,10 @@ instanceHotData n = "instance (Hot Hot" ++ show n +++ "n, Data a) => HotData Hot
 
 instanceHot n = runLines $ do
   Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
-  Line $ "\t" ++ "size _ =" +++ show n
-  Line $ "\t" ++ "mapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case"
+  tab 1 $ "size _ =" +++ show n
+  tab 1 $ "mapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case"
   Line $ unlinesN n (mapAtCase n)
-  Line $ "\t\t" ++ "n -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
+  tab 2 $ "n -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
 
 mapAtCase :: Int -> Int -> Text
 mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ hotConstr n f where
@@ -46,7 +46,7 @@ mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ hotConstr n f where
 
 dataHot n = runLines $ do
   Line $ "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a")
-  Line $ "\t" ++ "deriving (Eq, Ord, Read, Show, Data, Typeable)"
+  tab 1 $ "deriving (Eq, Ord, Read, Show, Data, Typeable)"
 
 hotConstr :: Int -> (Int -> Text) -> Text
 hotConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
@@ -58,6 +58,9 @@ unlinesN1 n f = intercalate "\n\n" $ map f [1 .. n]
 
 (+++) :: Text -> Text -> Text
 x +++ y = x ++ " " ++ y
+
+tab :: Int -> Text -> Line ()
+tab n x = Line $ (mconcat $ take n $ repeat "\t") ++ x
 
 
 newtype Line a = Line { runLines :: Text }
