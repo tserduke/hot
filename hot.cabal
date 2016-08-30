@@ -70,7 +70,7 @@ benchmark bench
                       ScopedTypeVariables
                       TupleSections
                       TypeOperators
-  ghc-options:        -O2 -Wall -fno-warn-tabs
+  ghc-options:        -O2 -Wall -fno-warn-tabs -fno-warn-orphans
 
 source-repository head
   type:     git

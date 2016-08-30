@@ -6,7 +6,8 @@ import Data.Hot.Base
 import GHC.TypeLits
 
 
-merge ::  (HotData t1 a n, HotData t2 a m, HotData t a (n + m), Ord a) => t1 a -> t2 a -> t a
+{-# INLINABLE merge #-}
+merge ::  (Hot t (n + m), Hot t1 n, Hot t2 m, Ord a) => t1 a -> t2 a -> t a
 merge x y = runMerge $ unfold f (M 0 0 (elementAt x) (elementAt y)) where
   f (M i j g p k) | i == size x = take2
                   | j == size y = take1
