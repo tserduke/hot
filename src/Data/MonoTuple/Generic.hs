@@ -15,10 +15,10 @@ elementAt :: (Data a, Data b) => a -> Int -> b
 elementAt x i = gmapQi i recast x
 
 
-merge :: (Data a, Data b, Data c) => Constr -> a -> b -> c
-merge constr t1 t2 = runMerge $ gunfold f (M 0 0 (elementAt t1) (elementAt t2)) constr where
-  f (M i j g p k) | i == 2 = take2
-                  | j == 3 = take1
+merge :: forall t1 t2 t a. (Data (t1 a), Data (t2 a), Data (t a), Data a, Ord a) => Constr -> Int -> Int -> t1 a -> t2 a -> t a
+merge constr n m t1 t2 = runMerge $ gunfold f (M 0 0 (elementAt t1 :: Int -> a) (elementAt t2)) constr where
+  f (M i j g p k) | i == n = take2
+                  | j == m = take1
                   | p j > g i = take1
                   | otherwise = take2
                   where

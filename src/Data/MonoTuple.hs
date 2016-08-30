@@ -16,4 +16,4 @@ elementAt = G.elementAt
 
 
 merge :: forall t1 t2 t a n m. (TupleData t1 a n, TupleData t2 a m, TupleData t a (n + m), Ord a) => t1 a -> t2 a -> t a
-merge = G.merge (toConstr (undefined :: t a))
+merge x y = G.merge (toConstr (undefined :: t a)) (size x) (size y) x y

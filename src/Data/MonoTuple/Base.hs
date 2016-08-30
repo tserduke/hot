@@ -3,7 +3,8 @@
 module Data.MonoTuple.Base where
 
 import Data.Data (Data, Typeable)
-import GHC.TypeLits (Nat)
+import Data.Proxy (Proxy (Proxy))
+import GHC.TypeLits (KnownNat, Nat, natVal)
 
 
 class (Tuple t n, Data (t a), Data a) => TupleData t a n
@@ -20,7 +21,9 @@ instance (Tuple Tuple9 n, Data a) => TupleData Tuple9 a n
 instance (Tuple Tuple10 n, Data a) => TupleData Tuple10 a n
 
 
-class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where
+class (KnownNat n) => Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where
+	size :: t a -> Int -- TEMP: to be replaced by length from Foldable
+	size _ = fromIntegral $ natVal (Proxy :: Proxy n)
 	mapAt :: (a -> a) -> t a -> Int -> t a
 
 
