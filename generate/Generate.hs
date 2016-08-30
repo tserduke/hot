@@ -4,48 +4,48 @@ import BasicPrelude
 
 
 main :: IO ()
-main = writeFile "../src/Data/MonoTuple/Base.hs" (baseModule 10)
+main = writeFile "../src/Data/Hot/Base.hs" (baseModule 10)
 
 
 baseModule :: Int -> Text
 baseModule n = runText $ do
   "{-# LANGUAGE DeriveDataTypeable, FunctionalDependencies, KindSignatures #-}"
   ""
-  "module Data.MonoTuple.Base where"
+  "module Data.Hot.Base where"
   ""
   "import Data.Data (Data, Typeable)"
   "import GHC.TypeLits (Nat)"
   "\n"
-  "class (Tuple t n, Data (t a), Data a) => TupleData t a n"
+  "class (Hot t n, Data (t a), Data a) => HotData t a n"
   ""
-  TextM $ unlinesN n instanceTupleData
+  TextM $ unlinesN n instanceHotData
   "\n"
-  "class Tuple (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
+  "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
   "\n"
-  TextM $ unlinesN1 n instanceTuple
+  TextM $ unlinesN1 n instanceHot
   "\n"
-  TextM $ unlinesN1 n dataTuple
+  TextM $ unlinesN1 n dataHot
   ""
 
 
-instanceTupleData, instanceTuple, dataTuple :: Int -> Text
-instanceTupleData n = "instance (Tuple Tuple" ++ show n +++ "n, Data a) => TupleData Tuple" ++ show n +++ "a n"
+instanceHotData, instanceHot, dataHot :: Int -> Text
+instanceHotData n = "instance (Hot Hot" ++ show n +++ "n, Data a) => HotData Hot" ++ show n +++ "a n"
 
-instanceTuple n = "instance Tuple Tuple" ++ show n +++ show n +++ "where" ++>
-  "\tmapAt f (" ++ tupleConstr n (("x" ++) . show) ++ ") = \\case" ++>
+instanceHot n = "instance Hot Hot" ++ show n +++ show n +++ "where" ++>
+  "\tmapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case" ++>
   unlinesN n (mapAtCase n) ++>
-  "\t\tn -> error $ \"Tuple" ++ show n ++ " mapAt \" ++ show n"
+  "\t\tn -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
 
 mapAtCase :: Int -> Int -> Text
-mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ tupleConstr n f where
+mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ hotConstr n f where
   f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
 
-dataTuple n =  "data Tuple" ++ show n +++ "a =" +++ tupleConstr n (const "!a") ++>
+dataHot n =  "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a") ++>
   "\tderiving (Eq, Ord, Read, Show, Data, Typeable)"
 
-tupleConstr :: Int -> (Int -> Text) -> Text
-tupleConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
+hotConstr :: Int -> (Int -> Text) -> Text
+hotConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
 
 
 unlinesN, unlinesN1 :: Int -> (Int -> Text) -> Text
