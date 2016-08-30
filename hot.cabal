@@ -41,7 +41,7 @@ test-suite test
   type:               exitcode-stdio-1.0
   hs-source-dirs:     test
   main-is:            Test.hs
-  other-modules:      Data.HotTest
+  other-modules:      Data.Hot.GenericTest
   build-depends:      base,
                       hot,
                       tasty,
@@ -55,7 +55,7 @@ benchmark bench
   type:               exitcode-stdio-1.0
   hs-source-dirs:     bench
   main-is:            Bench.hs
-  other-modules:      Data.HotBench
+  other-modules:      Data.Hot.GenericBench
   build-depends:      base,
                       criterion,
                       extra,

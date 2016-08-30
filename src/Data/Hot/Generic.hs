@@ -1,29 +1,20 @@
 module Data.Hot.Generic
-  ( recast
-  , elementAt
-  , merge
+  ( merge
   ) where
 
-import Data.Data (Constr, Data, fromConstr, gmapQi, gunfold, toConstr)
+import Data.Hot.Base
+import GHC.TypeLits
 
 
-recast :: (Data a, Data b) => a -> b
-recast = fromConstr . toConstr
-
-
-elementAt :: (Data a, Data b) => a -> Int -> b
-elementAt x i = gmapQi i recast x
-
-
-merge :: forall t1 t2 t a. (Data (t1 a), Data (t2 a), Data (t a), Data a, Ord a) => Constr -> Int -> Int -> t1 a -> t2 a -> t a
-merge constr n m t1 t2 = runMerge $ gunfold f (M 0 0 (elementAt t1 :: Int -> a) (elementAt t2)) constr where
-  f (M i j g p k) | i == n = take2
-                  | j == m = take1
+merge ::  (HotData t1 a n, HotData t2 a m, HotData t a (n + m), Ord a) => t1 a -> t2 a -> t a
+merge x y = runMerge $ unfold f (M 0 0 (elementAt x) (elementAt y)) where
+  f (M i j g p k) | i == size x = take2
+                  | j == size y = take1
                   | p j > g i = take1
                   | otherwise = take2
                   where
-                    take1 = M (i + 1) j g p (k $ recast $ g i)
-                    take2 = M i (j + 1) g p (k $ recast $ p j)
+                    take1 = M (i + 1) j g p (k $ g i)
+                    take2 = M i (j + 1) g p (k $ p j)
 
 data Merge a b c = M !Int !Int a b c
 

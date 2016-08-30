@@ -1,13 +1,14 @@
-module Data.HotBench (benchHot) where
+module Data.Hot.GenericBench (benchmarks) where
 
 import Criterion
 
 import qualified Data.List.Extra as L
 import Data.Hot
+import Data.Hot.Generic
 
 
-benchHot :: Benchmark
-benchHot = bgroup "Hot"
+benchmarks :: Benchmark
+benchmarks = bgroup "Hot"
   [ bgroup "merge"
     [ bgroup "5"
       [ bench "merge" $ whnf (merge (Hot2 1 3)) (Hot3 2 4 6 :: Hot3 Int)

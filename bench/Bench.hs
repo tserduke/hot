@@ -3,12 +3,12 @@ module Main (main) where
 import Criterion.Main
 import Criterion.Types
 
-import Data.HotBench
+import qualified Data.Hot.GenericBench as Generic
 
 
 main :: IO ()
 main = defaultMainWith config
-  [ benchHot
+  [ Generic.benchmarks
   ]
 
 config :: Config

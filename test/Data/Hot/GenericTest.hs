@@ -1,9 +1,10 @@
-module Data.HotTest (tests) where
+module Data.Hot.GenericTest (tests) where
 
 import Test.Tasty
 import Test.Tasty.HUnit
 
 import Data.Hot
+import Data.Hot.Generic
 
 
 tests :: TestTree

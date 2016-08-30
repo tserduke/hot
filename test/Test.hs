@@ -2,10 +2,10 @@ module Main (main) where
 
 import Test.Tasty
 
-import qualified Data.HotTest as Hot
+import qualified Data.Hot.GenericTest as Generic
 
 
 main :: IO ()
 main = defaultMain $ testGroup "Tests"
-  [ Hot.tests
+  [ Generic.tests
   ]
