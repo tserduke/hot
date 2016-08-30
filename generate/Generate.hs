@@ -21,6 +21,7 @@ baseModule n = runText $ do
   TextM $ unlinesN n instanceHotData
   "\n"
   "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
+  "\t" ++ "size :: t a -> Int"
   "\t" ++ "mapAt :: (a -> a) -> t a -> Int -> t a"
   "\n"
   TextM $ unlinesN1 n instanceHot
@@ -33,16 +34,17 @@ instanceHotData, instanceHot, dataHot :: Int -> Text
 instanceHotData n = "instance (Hot Hot" ++ show n +++ "n, Data a) => HotData Hot" ++ show n +++ "a n"
 
 instanceHot n = "instance Hot Hot" ++ show n +++ show n +++ "where" ++>
-  "\tmapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case" ++>
+  "\t" ++ "size _ =" +++ show n ++>
+  "\t" ++ "mapAt f (" ++ hotConstr n (("x" ++) . show) ++ ") = \\case" ++>
   unlinesN n (mapAtCase n) ++>
-  "\t\tn -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
+  "\t\t" ++ "n -> error $ \"Hot" ++ show n ++ " mapAt \" ++ show n"
 
 mapAtCase :: Int -> Int -> Text
 mapAtCase n i = "\t\t" ++ show (i - 1) +++ "->" +++ hotConstr n f where
   f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
 
 dataHot n =  "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a") ++>
-  "\tderiving (Eq, Ord, Read, Show, Data, Typeable)"
+  "\t" ++ "deriving (Eq, Ord, Read, Show, Data, Typeable)"
 
 hotConstr :: Int -> (Int -> Text) -> Text
 hotConstr n f = "T" ++ show n +++ unwords (map f [1 .. n])
