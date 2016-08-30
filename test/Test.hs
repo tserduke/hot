@@ -2,10 +2,10 @@ module Main where
 
 import Test.Tasty
 
-import qualified Data.MonoTupleTest as MonoTuple
+import qualified Data.MonoTupleTest as Tuple
 
 
 main :: IO ()
 main = defaultMain $ testGroup "Tests"
-  [ MonoTuple.tests
+  [ Tuple.tests
   ]
