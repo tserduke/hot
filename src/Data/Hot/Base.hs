@@ -1,4 +1,4 @@
-{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types, TypeFamilies #-}
+{-# LANGUAGE KindSignatures, Rank2Types, TypeFamilies #-}
 
 module Data.Hot.Base where
 
@@ -53,7 +53,7 @@ type family HotNat (t :: * -> *) :: Nat where
 	HotNat Hot10 = 10
 
 
-class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where
+class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) where
 	unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)
 	size :: t a -> Int
 	elementAt :: t a -> Int -> a

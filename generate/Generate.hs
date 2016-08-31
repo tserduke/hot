@@ -10,7 +10,7 @@ main = writeFile "../src/Data/Hot/Base.hs" (baseModule 10)
 
 baseModule :: Int -> Text
 baseModule n = runLines $ do
-  "{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types, TypeFamilies #-}"
+  "{-# LANGUAGE KindSignatures, Rank2Types, TypeFamilies #-}"
   ""
   "module Data.Hot.Base where"
   ""
@@ -25,7 +25,7 @@ baseModule n = runLines $ do
   "type family HotNat (t :: * -> *) :: Nat where"
   forN n hotNat
   "\n"
-  "class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
+  "class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) where"
   tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)"
   tab 1 "size :: t a -> Int"
   tab 1 "elementAt :: t a -> Int -> a"
