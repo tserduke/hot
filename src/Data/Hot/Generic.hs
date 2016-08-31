@@ -12,11 +12,12 @@ import GHC.TypeLits
 
 {-# INLINABLE prefix #-}
 prefix :: (Hot t n, Hot t1 m, m <= n) => t a -> t1 a
-prefix t = runSub $ unfold buildSub $ Sub 0 (elementAt t) where
+prefix t = runSub $ unfold buildSub $ Sub 0 (elementAt t)
 
 {-# INLINABLE suffix #-}
 suffix :: forall t n t1 m a. (Hot t n, Hot t1 m, m <= n) => t a -> t1 a
-suffix t = runSub $ unfold buildSub $ Sub (size t - size (undefined :: t1 a)) (elementAt t) where
+suffix t = runSub $ unfold buildSub $ Sub from (elementAt t) where
+  from = size t - size (undefined :: t1 a)
 
 data Sub a b = Sub !Int (Int -> a) b
 
