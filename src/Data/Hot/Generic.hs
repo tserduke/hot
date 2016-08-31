@@ -8,11 +8,13 @@ import Data.Hot.Base
 import GHC.TypeLits
 
 
-prefix, suffix :: forall t n t1 m a. (Hot t n, Hot t1 m) => t a -> t1 a
-
+{-# INLINABLE prefix #-}
+prefix :: (Hot t n, Hot t1 m) => t a -> t1 a
 prefix t = runSub $ unfold f (Sub 0) where
   f (Sub i k) = Sub (i + 1) (k (elementAt t i))
 
+{-# INLINABLE suffix #-}
+suffix :: forall t n t1 m a. (Hot t n, Hot t1 m) => t a -> t1 a
 suffix t = runSub $ unfold f (Sub (size t - size (undefined :: t1 a))) where
   f (Sub i k) = Sub (i + 1) (k (elementAt t i))
 
