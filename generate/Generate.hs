@@ -10,25 +10,38 @@ main = writeFile "../src/Data/Hot/Base.hs" (baseModule 10)
 
 baseModule :: Int -> Text
 baseModule n = runLines $ do
-  "{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types #-}"
+  "{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types, TypeFamilies #-}"
   ""
   "module Data.Hot.Base where"
   ""
   "import Data.Hot.Internal (hotError)"
   "import GHC.TypeLits (Nat)"
   "\n"
-  "class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
+  forN n dataHot
+  "\n"
+  "type family HotType (n :: Nat) :: * -> * where"
+  forN n hotType
+  ""
+  "type family HotNat (t :: * -> *) :: Nat where"
+  forN n hotNat
+  "\n"
+  "class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where"
   tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)"
   tab 1 "size :: t a -> Int"
   tab 1 "elementAt :: t a -> Int -> a"
   tab 1 "mapAt :: (a -> a) -> t a -> Int -> t a"
   "\n"
   forN n instanceHot
-  ""
-  forN n dataHot
 
 
-instanceHot, elementAtCase, dataHot :: Int -> Line ()
+dataHot, hotType, hotNat, instanceHot, elementAtCase :: Int -> Line ()
+dataHot n = do
+  Line $ "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a")
+  tab 1 $ "deriving (Eq, Ord, Read, Show)"
+
+hotType n = tab 1 $ "HotType" +++ show n +++ "= Hot" ++ show n
+hotNat n = tab 1 $ "HotNat Hot" ++ show n +++ "=" +++ show n
+
 instanceHot n = do
   Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
   tab 1 $ "{-# INLINABLE unfold #-}"
@@ -51,11 +64,6 @@ elementAtCase i = tab 2 $ show (i - 1) +++ "-> x" ++ show i
 mapAtCase :: Int -> Int -> Line ()
 mapAtCase n i = tab 2 $ show (i - 1) +++ "->" +++ hotConstr n f where
   f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
-
-dataHot n = do
-  Line $ "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a")
-  tab 1 $ "deriving (Eq, Ord, Read, Show)"
-  ""
 
 hotConstr :: Int -> (Int -> Text) -> Text
 hotConstr n f = "Hot" ++ show n +++ unwords (map f [1 .. n])

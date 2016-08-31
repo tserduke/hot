@@ -1,4 +1,4 @@
-{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types #-}
+{-# LANGUAGE FunctionalDependencies, KindSignatures, Rank2Types, TypeFamilies #-}
 
 module Data.Hot.Base where
 
@@ -6,7 +6,54 @@ import Data.Hot.Internal (hotError)
 import GHC.TypeLits (Nat)
 
 
-class Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where
+data Hot1 a = Hot1 !a
+	deriving (Eq, Ord, Read, Show)
+data Hot2 a = Hot2 !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot3 a = Hot3 !a !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot4 a = Hot4 !a !a !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot5 a = Hot5 !a !a !a !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot6 a = Hot6 !a !a !a !a !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot7 a = Hot7 !a !a !a !a !a !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot8 a = Hot8 !a !a !a !a !a !a !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot9 a = Hot9 !a !a !a !a !a !a !a !a !a
+	deriving (Eq, Ord, Read, Show)
+data Hot10 a = Hot10 !a !a !a !a !a !a !a !a !a !a
+	deriving (Eq, Ord, Read, Show)
+
+
+type family HotType (n :: Nat) :: * -> * where
+	HotType 1 = Hot1
+	HotType 2 = Hot2
+	HotType 3 = Hot3
+	HotType 4 = Hot4
+	HotType 5 = Hot5
+	HotType 6 = Hot6
+	HotType 7 = Hot7
+	HotType 8 = Hot8
+	HotType 9 = Hot9
+	HotType 10 = Hot10
+
+type family HotNat (t :: * -> *) :: Nat where
+	HotNat Hot1 = 1
+	HotNat Hot2 = 2
+	HotNat Hot3 = 3
+	HotNat Hot4 = 4
+	HotNat Hot5 = 5
+	HotNat Hot6 = 6
+	HotNat Hot7 = 7
+	HotNat Hot8 = 8
+	HotNat Hot9 = 9
+	HotNat Hot10 = 10
+
+
+class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) | t -> n, n -> t where
 	unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)
 	size :: t a -> Int
 	elementAt :: t a -> Int -> a
@@ -242,34 +289,3 @@ instance Hot Hot10 10 where
 		8 -> Hot10 x1 x2 x3 x4 x5 x6 x7 x8 (f x9) x10
 		9 -> Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 (f x10)
 		n -> hotError 10 "mapAt" n
-
-
-data Hot1 a = Hot1 !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot2 a = Hot2 !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot3 a = Hot3 !a !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot4 a = Hot4 !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot5 a = Hot5 !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot6 a = Hot6 !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot7 a = Hot7 !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot8 a = Hot8 !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot9 a = Hot9 !a !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-
-data Hot10 a = Hot10 !a !a !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
