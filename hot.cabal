@@ -19,6 +19,7 @@ library
   exposed-modules:    Data.Hot
                       Data.Hot.Base
                       Data.Hot.Generic
+                      Data.Hot.Sort
   other-modules:      Data.Hot.Internal
   build-depends:      base
   default-language:   Haskell2010
@@ -32,9 +33,11 @@ library
                       TupleSections
                       TypeOperators
   other-extensions:   FunctionalDependencies
+                      InstanceSigs
                       KindSignatures
                       Rank2Types
                       TypeFamilies
+                      UndecidableInstances
   ghc-options:        -O2 -Wall -fno-warn-tabs
 
 test-suite test
