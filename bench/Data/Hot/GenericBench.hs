@@ -8,7 +8,7 @@ import Data.Hot.Generic
 
 
 benchmarks :: Benchmark
-benchmarks = bgroup "Hot"
+benchmarks = bgroup "Generic"
   [ bgroup "sub"
     [ bench "prefix" $ whnf (prefix :: Hot10 Int -> Hot5 Int) (Hot10 1 2 3 4 5 6 7 8 9 10)
     , bench "suffix" $ whnf (suffix :: Hot10 Int -> Hot5 Int) (Hot10 1 2 3 4 5 6 7 8 9 10)
@@ -26,11 +26,6 @@ benchmarks = bgroup "Hot"
     , bgroup "9 1"
       [ bench "impl" $ whnf (merge (Hot9 1 2 3 4 5 6 7 8 9)) (Hot1 2 :: Hot1 Int)
       , bench "stream" $ whnf (last . L.merge (enumFromTo 1 9)) ([1] :: [Int])
-      ]
-    ]
-  , bgroup "sort"
-    [ bgroup "10"
-      [ bench "list" $ nf L.sort ([2, 9, 5, 7, 2, 10, 7, 4, 3, 1] :: [Int])
       ]
     ]
   ]
