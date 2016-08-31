@@ -29,6 +29,7 @@ library
                       FlexibleInstances
                       LambdaCase
                       MultiParamTypeClasses
+                      MultiWayIf
                       ScopedTypeVariables
                       TupleSections
                       TypeOperators
@@ -71,6 +72,7 @@ benchmark bench
                       KindSignatures
                       LambdaCase
                       MultiParamTypeClasses
+                      MultiWayIf
                       ScopedTypeVariables
                       TupleSections
                       TypeOperators

@@ -25,6 +25,16 @@ instance {-# OVERLAPPING #-} Sort Hot2 where
     then Hot2 y x
     else t
 
+instance {-# OVERLAPPING #-} Sort Hot3 where
+  {-# INLINABLE sort #-}
+  sort (Hot3 x y z) = if x < y
+    then if | z > y     -> Hot3 x y z
+            | z > x     -> Hot3 x z y
+            | otherwise -> Hot3 z x y
+    else if | z > x     -> Hot3 y x z
+            | z > y     -> Hot3 y z x
+            | otherwise -> Hot3 z y x
+
 instance {-# OVERLAPPABLE #-} (
          Hot t n, n ~ HotNat t, n ~ (n1 + n2),
          Hot t1 n1, Sort t1, t1 ~ HotType n1, n1 ~ Half n, n1 <= n,
