@@ -4,6 +4,7 @@ module Data.Hot.Generic
   ( prefix
   , suffix
   , merge
+  , merge2
   ) where
 
 import Data.Hot.Base
@@ -26,6 +27,31 @@ buildSub (Sub i f k) = Sub (i + 1) f (k (f i))
 
 runSub :: Sub a r -> r
 runSub (Sub _ _ x) = x
+
+
+{-# INLINABLE merge2 #-}
+merge2 :: (Hot t (n + m), Hot t1 n, Hot t2 m, Ord a) => t1 a -> t2 a -> t a
+merge2 x y = runMerge2 $ unfold (buildMerge2 (size x - 1) (size y - 1)) (M2 (MB 0 (f 0) f) (MB 0 (g 0) g)) where
+  f = elementAt x
+  g = elementAt y
+
+data M2 a b = M2 (MB a) (MB a) b | M1 (Sub a b)
+data MB a = MB !Int !a (Int -> a)
+
+buildMerge2 :: (Ord a) => Int -> Int -> M2 a (a -> r) -> M2 a r
+buildMerge2 n m = \case
+  M1 sub -> M1 $ buildSub sub
+  M2 a@(MB i x f) b@(MB j y g) k -> if x < y
+    then if i == n
+         then M1 $ Sub j g (k x)
+         else M2 (MB (i + 1) (f (i + 1)) f) b (k x)
+    else if j == m
+         then M1 $ Sub i f (k y)
+         else M2 a (MB (j + 1) (g (j + 1)) g) (k y)
+
+runMerge2 :: M2 a r -> r
+runMerge2 (M1 sub) = runSub sub
+runMerge2 _ = error "Impossible hot merge!!!"
 
 
 {-# INLINABLE merge #-}
