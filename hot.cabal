@@ -44,6 +44,7 @@ test-suite test
   hs-source-dirs:     test
   main-is:            Test.hs
   other-modules:      Data.Hot.GenericTest
+                      Data.Hot.SortTest
   build-depends:      base,
                       hot,
                       tasty,
