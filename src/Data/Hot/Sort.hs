@@ -26,8 +26,8 @@ instance Sort Hot2 where
     else t
 
 instance (Hot t n, n ~ HotNat t, n ~ (n1 + n2),
-          Hot t1 n1, Sort t1, t1 ~ HotType n1, n1 ~ Half n,
-          Hot t2 n2, Sort t2, t2 ~ HotType n2, n2 ~ (n - n1)) => Sort t where
+          Hot t1 n1, Sort t1, t1 ~ HotType n1, n1 ~ Half n, n1 <= n,
+          Hot t2 n2, Sort t2, t2 ~ HotType n2, n2 ~ (n - n1), n2 <= n) => Sort t where
   {-# INLINABLE sort #-}
   sort :: forall a. (Ord a) => t a -> t a
   sort t = merge (sort $ prefix t :: t1 a) (sort $ suffix t :: t2 a)

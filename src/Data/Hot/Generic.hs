@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeFamilies #-}
+
 module Data.Hot.Generic
   ( prefix
   , suffix
@@ -9,11 +11,11 @@ import GHC.TypeLits
 
 
 {-# INLINABLE prefix #-}
-prefix :: (Hot t n, Hot t1 m) => t a -> t1 a
+prefix :: (Hot t n, Hot t1 m, m <= n) => t a -> t1 a
 prefix t = runSub $ unfold buildSub $ Sub 0 (elementAt t) where
 
 {-# INLINABLE suffix #-}
-suffix :: forall t n t1 m a. (Hot t n, Hot t1 m) => t a -> t1 a
+suffix :: forall t n t1 m a. (Hot t n, Hot t1 m, m <= n) => t a -> t1 a
 suffix t = runSub $ unfold buildSub $ Sub (size t - size (undefined :: t1 a)) (elementAt t) where
 
 data Sub a b = Sub !Int (Int -> a) b
