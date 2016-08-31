@@ -44,12 +44,12 @@ hotNat n = tab 1 $ "HotNat Hot" ++ show n +++ "=" +++ show n
 
 instanceHot n = do
   Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
-  tab 1 $ "{-# INLINABLE unfold #-}"
+  tab 1 $ "{-# INLINE unfold #-}"
   tab 1 $ "unfold f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
   tab 1 $ "{-# INLINE size #-}"
   tab 1 $ "size _ =" +++ show n
   let constr = "(" ++ hotConstr n (("x" ++) . show) ++ ")"
-  tab 1 $ "{-# INLINABLE elementAt #-}"
+  tab 1 $ "{-# INLINE elementAt #-}"
   tab 1 $ "elementAt" +++ constr +++ "= \\case"
   forN n elementAtCase
   tab 2 $ "n -> hotError" +++ show n +++ "\"elementAt\" n"

@@ -4,7 +4,6 @@ module Data.Hot.Generic
   ( prefix
   , suffix
   , merge
-  , merge2
   ) where
 
 import Data.Hot.Base
@@ -29,52 +28,22 @@ runSub :: Sub a r -> r
 runSub (Sub _ _ x) = x
 
 
-{-# INLINABLE merge2 #-}
-merge2 :: (Hot t (n + m), Hot t1 n, Hot t2 m, Ord a) => t1 a -> t2 a -> t a
-merge2 x y = runMerge2 $ unfold (buildMerge2 (size x - 1) (size y - 1)) (M2 0 (f 0) f 0 (g 0) g) where --(M2 (MB 0 (f 0) f) (MB 0 (g 0) g)) where
-  f = elementAt x
-  g = elementAt y
-
---data M2 a b = M2 (MB a) (MB a) b | M1 (Sub a b)
---data MB a = MB !Int !a (Int -> a)
-data M2 a b = M2 !Int !a (Int -> a) !Int !a (Int -> a) b | M1 !Int (Int -> a) b
-
-buildMerge2 :: (Ord a) => Int -> Int -> M2 a (a -> r) -> M2 a r
-buildMerge2 n m = \case
-  --M1 sub -> M1 $ buildSub sub
-  M1 i f k -> M1 (i + 1) f (k (f i))
-  --M2 a@(MB i x f) b@(MB j y g) k -> if x < y
-  M2 i x f j y g k -> if x < y
-    then if i == n
-         then M1 j g (k x)
-         --else M2 (MB (i + 1) (f (i + 1)) f) b (k x)
-         else M2 (i + 1) (f (i + 1)) f j y g (k x)
-    else if j == m
-         then M1 i f (k y)
-         --else M2 a (MB (j + 1) (g (j + 1)) g) (k y)
-         else M2 i x f (j + 1) (g (j + 1)) g (k y)
-
-runMerge2 :: M2 a r -> r
---runMerge2 (M1 sub) = runSub sub
-runMerge2 (M1 _ _ x) = x
-runMerge2 _ = error "Impossible hot merge!!!"
-
-
 {-# INLINABLE merge #-}
 merge :: (Hot t (n + m), Hot t1 n, Hot t2 m, Ord a) => t1 a -> t2 a -> t a
-merge x y = runMerge $ unfold (buildMerge (size x) (size y)) (M 0 0 (elementAt x) (elementAt y))
+merge x y = runMerge $ unfold (buildMerge (size x) (size y)) (Merge 0 0 (elementAt x) (elementAt y))
 
-data Merge a b = M !Int !Int (Int -> a) (Int -> a) b
+data Merge a b = Merge !Int !Int (Int -> a) (Int -> a) b
 
 buildMerge :: (Ord a) => Int -> Int -> Merge a (a -> r) -> Merge a r
-buildMerge n m (M i j g p k)
-  | i == n = take2
-  | j == m = take1
-  | p j > g i = take1
-  | otherwise = take2
-  where
-    take1 = M (i + 1) j g p (k $ g i)
-    take2 = M i (j + 1) g p (k $ p j)
+buildMerge n m = \case
+  (Merge i j f g k)
+    | i == n    -> take2
+    | j == m    -> take1
+    | f i < g j -> take1
+    | otherwise -> take2
+    where
+      take1 = Merge (i + 1) j f g (k (f i))
+      take2 = Merge i (j + 1) f g (k (g j))
 
 runMerge :: Merge a r -> r
-runMerge (M _ _ _ _ x) = x
+runMerge (Merge _ _ _ _ x) = x
