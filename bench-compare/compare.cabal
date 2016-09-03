@@ -8,7 +8,6 @@ executable compare-bench
   main-is:            Compare.hs
   other-modules:
   build-depends:      base,
-                      ansi-terminal,
                       bytestring,
                       boxes,
                       cassava,

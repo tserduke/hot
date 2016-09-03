@@ -19,13 +19,17 @@ main = do
   let suits = map fst benchmarks
   let (cases, measures) = combineRecords $ map snd benchmarks
   let x <|> y = x <> column (replicate (length cases + 2) " | ") <> y
-  printBox $ ("" // "----" // column cases) <|> foldr1 (<|>) (zipWith (//) (map ((// "----") . text) suits) $ map (column . map showMeasure) measures)
+  let benchColumn = "benchmark" // "----" // column cases
+  printBox $ benchColumn <|> foldr1 (<|>) (zipWith timeColumn suits measures)
+
+timeColumn :: String -> [Maybe Double] -> Box
+timeColumn suit means = text suit // "----" // column (map showTime means)
+
+showTime :: Maybe Double -> String
+showTime = maybe "" (show . (round :: Double -> Int) . (* 1000000000))
 
 column :: [String] -> Box
 column = foldr1 (//) . map text
-
-showMeasure :: Maybe Double -> String
-showMeasure = maybe "" (show . (round :: Double -> Int) . (* 1000000000))
 
 
 type Record = (String, Double)
