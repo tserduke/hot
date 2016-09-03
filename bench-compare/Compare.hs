@@ -18,7 +18,8 @@ main = do
   benchmarks <- forM files readData
   let suits = map fst benchmarks
   let (cases, measures) = combineRecords $ map snd benchmarks
-  printBox $ (text "" // column cases) <> foldr1 (<>) (zipWith (//) (map text suits) $ map (column . map showMeasure) measures)
+  let x <|> y = x <> column (replicate (length cases + 2) " | ") <> y
+  printBox $ ("" // "----" // column cases) <|> foldr1 (<|>) (zipWith (//) (map ((// "----") . text) suits) $ map (column . map showMeasure) measures)
 
 column :: [String] -> Box
 column = foldr1 (//) . map text

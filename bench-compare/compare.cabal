@@ -23,6 +23,7 @@ executable compare-bench
                       GeneralizedNewtypeDeriving
                       LambdaCase
                       MultiParamTypeClasses
+                      OverloadedStrings
                       ScopedTypeVariables
                       TupleSections
   ghc-options:        -O2 -Wall
