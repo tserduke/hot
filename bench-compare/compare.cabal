@@ -12,7 +12,9 @@ executable generate-mt
                       bytestring,
                       boxes,
                       cassava,
-                      directory
+                      directory,
+                      filepath,
+                      vector
   default-language:   Haskell2010
   default-extensions: BangPatterns
                       FlexibleContexts
