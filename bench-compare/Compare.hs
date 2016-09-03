@@ -1,10 +1,10 @@
 module Main (main) where
 
-import Control.Monad (forM, liftM)
-import Data.Csv (FromRecord, HasHeader (HasHeader), (.!), decode, parseRecord)
+import Control.Monad (forM)
 import System.Directory (listDirectory)
 import System.FilePath ((</>), dropExtensions)
 import qualified Data.ByteString.Lazy as B
+import qualified Data.Csv as C
 import qualified Data.Vector as V
 
 
@@ -16,13 +16,14 @@ main = do
   return ()
 
 readData :: FilePath -> IO (String, V.Vector (String, Double))
-readData file = fmap (dropExtensions file, ) records where
-  records = liftM decodeRecords $ B.readFile ("data" </> file)
+readData file = do
+  content <- B.readFile ("data" </> file)
+  return (dropExtensions file, decodeRecords content)
 
 decodeRecords :: B.ByteString -> V.Vector (String, Double)
-decodeRecords = either error (V.map unRecord) . decode HasHeader
+decodeRecords = either error (V.map unRecord) . C.decode C.HasHeader
 
-newtype DataRecord = Record { unRecord :: (String, Double) }
+newtype Record = Record { unRecord :: (String, Double) }
 
-instance FromRecord DataRecord where
-  parseRecord x = fmap Record $ (,) <$> (x .! 0) <*> (x .! 1)
+instance C.FromRecord Record where
+  parseRecord x = fmap Record $ (,) <$> (x C..! 0) <*> (x C..! 1)
