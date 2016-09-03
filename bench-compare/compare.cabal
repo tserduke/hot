@@ -12,6 +12,7 @@ executable generate-mt
                       bytestring,
                       boxes,
                       cassava,
+                      containers,
                       directory,
                       filepath,
                       vector
