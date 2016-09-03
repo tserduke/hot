@@ -1,6 +1,7 @@
 module Main (main) where
 
 import Control.Monad (forM)
+import Data.Maybe (maybe)
 import System.Directory (listDirectory)
 import System.FilePath ((</>), dropExtensions)
 import Text.PrettyPrint.Boxes (Box, (<>), (//), printBox, text)
@@ -16,17 +17,14 @@ main = do
   files <- listDirectory "data"
   benchmarks <- forM files readData
   let suits = map fst benchmarks
-  let header = text "" <> row suits
   let (cases, measures) = combineRecords $ map snd benchmarks
-  let body = column cases <> foldr1 (<>) (map (column . map show) measures)
-  printBox (header // body)
-  return ()
-
-row :: [String] -> Box
-row = foldr1 (<>) . map text
+  printBox $ (text "" // column cases) <> foldr1 (<>) (zipWith (//) (map text suits) $ map (column . map showMeasure) measures)
 
 column :: [String] -> Box
 column = foldr1 (//) . map text
+
+showMeasure :: Maybe Double -> String
+showMeasure = maybe "" (show . (round :: Double -> Int) . (* 1000000000))
 
 
 type Record = (String, Double)
