@@ -3,7 +3,7 @@ module Main (main) where
 import Control.Monad (forM)
 import System.Directory (listDirectory)
 import System.FilePath ((</>), dropExtensions)
-import Text.PrettyPrint.Boxes ((<>), (//))
+import Text.PrettyPrint.Boxes (Box, (<>), (//), printBox, text)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Csv as C
 import qualified Data.Map as M
@@ -14,10 +14,19 @@ import qualified Data.Vector as V
 main :: IO ()
 main = do
   files <- listDirectory "data"
-  records <- forM files readData
-  print $ map fst $ records
-  print $ combineRecords $ map snd records
+  benchmarks <- forM files readData
+  let suits = map fst benchmarks
+  let header = text "" <> row suits
+  let (cases, measures) = combineRecords $ map snd benchmarks
+  let body = column cases <> foldr1 (<>) (map (column . map show) measures)
+  printBox (header // body)
   return ()
+
+row :: [String] -> Box
+row = foldr1 (<>) . map text
+
+column :: [String] -> Box
+column = foldr1 (//) . map text
 
 
 type Record = (String, Double)
