@@ -44,8 +44,7 @@ test-suite test
   type:               exitcode-stdio-1.0
   hs-source-dirs:     test
   main-is:            Test.hs
-  other-modules:      Data.Hot.GenericTest
-                      Data.Hot.SortTest
+  other-modules:
   build-depends:      base,
                       hot,
                       tasty,
