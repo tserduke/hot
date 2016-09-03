@@ -7,21 +7,25 @@ import Data.Hot
 
 main :: IO ()
 main = hspec $ describe "Hot" $ do
+
   describe "prefix" $ do
     it "5 3" $ prefix (Hot5 1 2 3 4 5) `shouldBe` (Hot3 1 2 3 :: Hot3 Int)
     it "2 1" $ prefix (Hot2 1 2) `shouldBe` (Hot1 1 :: Hot1 Int)
     it "3 3" $ prefix (Hot3 1 2 3) `shouldBe` (Hot3 1 2 3 :: Hot3 Int)
     it "1 1" $ prefix (Hot1 1) `shouldBe` (Hot1 1 :: Hot1 Int)
+
   describe "suffix" $ do
     it "5 3" $ suffix (Hot5 1 2 3 4 5) `shouldBe` (Hot3 3 4 5 :: Hot3 Int)
     it "2 1" $ suffix (Hot2 1 2) `shouldBe` (Hot1 2 :: Hot1 Int)
     it "3 3" $ suffix (Hot3 1 2 3) `shouldBe` (Hot3 1 2 3 :: Hot3 Int)
     it "1 1" $ suffix (Hot1 1) `shouldBe` (Hot1 1 :: Hot1 Int)
+
   describe "merge" $ do
     it "3 2" $ merge (Hot3 1 2 3) (Hot2 4 5) `shouldBe` (Hot5 1 2 3 4 5 :: Hot5 Int)
     it "1 2" $ merge (Hot1 2) (Hot2 1 3) `shouldBe` (Hot3 1 2 3 :: Hot3 Int)
     it "4 5" $ merge (Hot4 4 4 4 4) (Hot5 5 5 5 5 5) `shouldBe` (Hot9 4 4 4 4 5 5 5 5 5 :: Hot9 Int)
     it "2 2" $ merge (Hot2 4 5) (Hot2 1 2) `shouldBe` (Hot4 1 2 4 5 :: Hot4 Int)
+
   describe "sort" $ do
     it "1" $ sort (Hot1 True) `shouldBe` (Hot1 True)
     it "2" $ sort (Hot2 True False) `shouldBe` (Hot2 False True)
