@@ -17,33 +17,20 @@ baseModule n = runLines $ do
   "import Data.Hot.Internal (hotError)"
   "import GHC.TypeLits (Nat)"
   "\n"
-  forN n dataHot
-  "\n"
-  "type family HotType (n :: Nat) :: * -> * where"
-  forN n hotType
-  ""
-  "type family HotNat (t :: * -> *) :: Nat where"
-  forN n hotNat
-  "\n"
-  "class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) where"
-  tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)"
-  tab 1 "size :: t a -> Int"
-  tab 1 "elementAt :: t a -> Int -> a"
-  tab 1 "mapAt :: (a -> a) -> t a -> Int -> t a"
+  "class HotClass (n :: Nat) where"
+  tab 1 "data Hot n :: * -> *"
+  tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)"
+  tab 1 "size :: Hot n a -> Int"
+  tab 1 "elementAt :: Hot n a -> Int -> a"
+  tab 1 "mapAt :: (a -> a) -> Hot n a -> Int -> Hot n a"
   "\n"
   forN n instanceHot
 
 
-dataHot, hotType, hotNat, instanceHot, elementAtCase :: Int -> Line ()
-dataHot n = do
-  Line $ "data Hot" ++ show n +++ "a =" +++ hotConstr n (const "!a")
-  tab 1 $ "deriving (Eq, Ord, Read, Show)"
-
-hotType n = tab 1 $ "HotType" +++ show n +++ "= Hot" ++ show n
-hotNat n = tab 1 $ "HotNat Hot" ++ show n +++ "=" +++ show n
-
+instanceHot, dataHot, elementAtCase :: Int -> Line ()
 instanceHot n = do
-  Line $ "instance Hot Hot" ++ show n +++ show n +++ "where"
+  Line $ "instance HotClass" +++ show n +++ "where"
+  dataHot n
   tab 1 $ "{-# INLINE unfold #-}"
   tab 1 $ "unfold f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
   tab 1 $ "{-# INLINE size #-}"
@@ -58,6 +45,9 @@ instanceHot n = do
   forN n (mapAtCase n)
   tab 2 $ "n -> hotError" +++ show n +++ "\"mapAt\" n"
   ""
+dataHot n = do
+  tab 1 $ "data Hot" +++ show n +++ "a =" +++ hotConstr n (const "!a")
+  tab 2 $ "deriving (Eq, Ord, Read, Show)"
 
 elementAtCase i = tab 2 $ show (i - 1) +++ "-> x" ++ show i
 

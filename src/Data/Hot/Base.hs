@@ -6,61 +6,17 @@ import Data.Hot.Internal (hotError)
 import GHC.TypeLits (Nat)
 
 
-data Hot1 a = Hot1 !a
-	deriving (Eq, Ord, Read, Show)
-data Hot2 a = Hot2 !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot3 a = Hot3 !a !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot4 a = Hot4 !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot5 a = Hot5 !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot6 a = Hot6 !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot7 a = Hot7 !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot8 a = Hot8 !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot9 a = Hot9 !a !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
-data Hot10 a = Hot10 !a !a !a !a !a !a !a !a !a !a
-	deriving (Eq, Ord, Read, Show)
+class HotClass (n :: Nat) where
+	data Hot n :: * -> *
+	unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)
+	size :: Hot n a -> Int
+	elementAt :: Hot n a -> Int -> a
+	mapAt :: (a -> a) -> Hot n a -> Int -> Hot n a
 
 
-type family HotType (n :: Nat) :: * -> * where
-	HotType 1 = Hot1
-	HotType 2 = Hot2
-	HotType 3 = Hot3
-	HotType 4 = Hot4
-	HotType 5 = Hot5
-	HotType 6 = Hot6
-	HotType 7 = Hot7
-	HotType 8 = Hot8
-	HotType 9 = Hot9
-	HotType 10 = Hot10
-
-type family HotNat (t :: * -> *) :: Nat where
-	HotNat Hot1 = 1
-	HotNat Hot2 = 2
-	HotNat Hot3 = 3
-	HotNat Hot4 = 4
-	HotNat Hot5 = 5
-	HotNat Hot6 = 6
-	HotNat Hot7 = 7
-	HotNat Hot8 = 8
-	HotNat Hot9 = 9
-	HotNat Hot10 = 10
-
-
-class (HotType n ~ t, HotNat t ~ n) => Hot (t :: * -> *) (n :: Nat) where
-	unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (t a)
-	size :: t a -> Int
-	elementAt :: t a -> Int -> a
-	mapAt :: (a -> a) -> t a -> Int -> t a
-
-
-instance Hot Hot1 1 where
+instance HotClass 1 where
+	data Hot 1 a = Hot1 !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (z Hot1)
 	{-# INLINE size #-}
@@ -74,7 +30,9 @@ instance Hot Hot1 1 where
 		0 -> Hot1 (f x1)
 		n -> hotError 1 "mapAt" n
 
-instance Hot Hot2 2 where
+instance HotClass 2 where
+	data Hot 2 a = Hot2 !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (z Hot2))
 	{-# INLINE size #-}
@@ -90,7 +48,9 @@ instance Hot Hot2 2 where
 		1 -> Hot2 x1 (f x2)
 		n -> hotError 2 "mapAt" n
 
-instance Hot Hot3 3 where
+instance HotClass 3 where
+	data Hot 3 a = Hot3 !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (z Hot3)))
 	{-# INLINE size #-}
@@ -108,7 +68,9 @@ instance Hot Hot3 3 where
 		2 -> Hot3 x1 x2 (f x3)
 		n -> hotError 3 "mapAt" n
 
-instance Hot Hot4 4 where
+instance HotClass 4 where
+	data Hot 4 a = Hot4 !a !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (f (z Hot4))))
 	{-# INLINE size #-}
@@ -128,7 +90,9 @@ instance Hot Hot4 4 where
 		3 -> Hot4 x1 x2 x3 (f x4)
 		n -> hotError 4 "mapAt" n
 
-instance Hot Hot5 5 where
+instance HotClass 5 where
+	data Hot 5 a = Hot5 !a !a !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (f (f (z Hot5)))))
 	{-# INLINE size #-}
@@ -150,7 +114,9 @@ instance Hot Hot5 5 where
 		4 -> Hot5 x1 x2 x3 x4 (f x5)
 		n -> hotError 5 "mapAt" n
 
-instance Hot Hot6 6 where
+instance HotClass 6 where
+	data Hot 6 a = Hot6 !a !a !a !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (f (f (f (z Hot6))))))
 	{-# INLINE size #-}
@@ -174,7 +140,9 @@ instance Hot Hot6 6 where
 		5 -> Hot6 x1 x2 x3 x4 x5 (f x6)
 		n -> hotError 6 "mapAt" n
 
-instance Hot Hot7 7 where
+instance HotClass 7 where
+	data Hot 7 a = Hot7 !a !a !a !a !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (z Hot7)))))))
 	{-# INLINE size #-}
@@ -200,7 +168,9 @@ instance Hot Hot7 7 where
 		6 -> Hot7 x1 x2 x3 x4 x5 x6 (f x7)
 		n -> hotError 7 "mapAt" n
 
-instance Hot Hot8 8 where
+instance HotClass 8 where
+	data Hot 8 a = Hot8 !a !a !a !a !a !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (f (z Hot8))))))))
 	{-# INLINE size #-}
@@ -228,7 +198,9 @@ instance Hot Hot8 8 where
 		7 -> Hot8 x1 x2 x3 x4 x5 x6 x7 (f x8)
 		n -> hotError 8 "mapAt" n
 
-instance Hot Hot9 9 where
+instance HotClass 9 where
+	data Hot 9 a = Hot9 !a !a !a !a !a !a !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (f (f (z Hot9)))))))))
 	{-# INLINE size #-}
@@ -258,7 +230,9 @@ instance Hot Hot9 9 where
 		8 -> Hot9 x1 x2 x3 x4 x5 x6 x7 x8 (f x9)
 		n -> hotError 9 "mapAt" n
 
-instance Hot Hot10 10 where
+instance HotClass 10 where
+	data Hot 10 a = Hot10 !a !a !a !a !a !a !a !a !a !a
+		deriving (Eq, Ord, Read, Show)
 	{-# INLINE unfold #-}
 	unfold f z = f (f (f (f (f (f (f (f (f (f (z Hot10))))))))))
 	{-# INLINE size #-}
