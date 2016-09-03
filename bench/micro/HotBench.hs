@@ -1,14 +1,13 @@
 module Main (main) where
 
 import Criterion.Main
-import Criterion.Types
 
 import Data.Hot
 import qualified Data.List.Extra as L
 
 
 main :: IO ()
-main = defaultMainWith config $
+main = defaultMain $
   [ bgroup "sub"
     [ bench "prefix" $ whnf (prefix :: Hot 10 Int -> Hot 5 Int) (Hot10 1 2 3 4 5 6 7 8 9 10)
     , bench "suffix" $ whnf (suffix :: Hot 10 Int -> Hot 5 Int) (Hot10 1 2 3 4 5 6 7 8 9 10)
@@ -35,8 +34,3 @@ main = defaultMainWith config $
       ]
     ]
   ]
-
-config :: Config
-config = defaultConfig {
-  timeLimit = 0.5
-}

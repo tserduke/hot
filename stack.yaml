@@ -2,6 +2,6 @@ resolver: lts-6.14
 packages:
 - .
 extra-deps: []
-flags:
+flags: {}
 extra-package-dbs: []
 system-ghc: false

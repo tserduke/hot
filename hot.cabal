@@ -62,8 +62,8 @@ test-suite unit
 
 benchmark native
   type:               exitcode-stdio-1.0
-  hs-source-dirs:     bench
-  main-is:            Bench.hs
+  hs-source-dirs:     bench/micro
+  main-is:            HotBench.hs
   build-depends:      base,
                       criterion,
                       extra,
@@ -74,8 +74,8 @@ benchmark native
 
 benchmark llvm-3.5
   type:               exitcode-stdio-1.0
-  hs-source-dirs:     bench
-  main-is:            Bench.hs
+  hs-source-dirs:     bench/micro
+  main-is:            HotBench.hs
   build-depends:      base,
                       criterion,
                       extra,
@@ -86,8 +86,8 @@ benchmark llvm-3.5
 
 benchmark llvm-3.7
   type:               exitcode-stdio-1.0
-  hs-source-dirs:     bench
-  main-is:            Bench.hs
+  hs-source-dirs:     bench/micro
+  main-is:            HotBench.hs
   build-depends:      base,
                       criterion,
                       extra,
