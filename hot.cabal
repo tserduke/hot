@@ -20,7 +20,10 @@ flag inline
   manual:             True
 
 library
-  hs-source-dirs:     src, generate/inline
+  if flag(inline)
+    hs-source-dirs:   src, generate/inline
+  else
+    hs-source-dirs:   src, generate/inlinable
   exposed-modules:    Data.Hot
                       Data.Hot.Base
                       Data.Hot.Generic
