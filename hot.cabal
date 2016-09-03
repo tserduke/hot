@@ -52,7 +52,7 @@ test-suite unit
   default-extensions: DataKinds
   ghc-options:        -O2 -Wall -with-rtsopts=-K1K
 
-benchmark bench
+benchmark native
   type:               exitcode-stdio-1.0
   hs-source-dirs:     bench
   main-is:            Bench.hs
@@ -64,7 +64,7 @@ benchmark bench
   default-extensions: DataKinds
   ghc-options:        -O2 -Wall
 
-benchmark bench-llvm
+benchmark llvm-3.7
   type:               exitcode-stdio-1.0
   hs-source-dirs:     bench
   main-is:            Bench.hs

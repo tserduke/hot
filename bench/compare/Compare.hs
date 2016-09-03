@@ -3,7 +3,7 @@ module Main (main) where
 import Control.Monad (forM)
 import Data.Maybe (maybe)
 import System.Directory (listDirectory)
-import System.FilePath ((</>), dropExtensions)
+import System.FilePath ((</>), splitExtension)
 import Text.PrettyPrint.Boxes (Box, (<>), (//), printBox, text)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Csv as C
@@ -14,16 +14,19 @@ import qualified Data.Vector as V
 
 main :: IO ()
 main = do
-  files <- listDirectory "data"
-  benchmarks <- forM files readData
+  let dir = "../data"
+  files <- listDirectory dir
+  benchmarks <- forM files (readData dir)
+  putStrLn ""
   let suits = map fst benchmarks
   let (cases, measures) = combineRecords $ map snd benchmarks
   let x <|> y = x <> column (replicate (length cases + 2) " | ") <> y
-  let benchColumn = "benchmark" // "----" // column cases
+  let benchColumn = "benchmark" // "-----" // column cases
   printBox $ benchColumn <|> foldr1 (<|>) (zipWith timeColumn suits measures)
+  putStrLn ""
 
 timeColumn :: String -> [Maybe Double] -> Box
-timeColumn suit means = text suit // "----" // column (map showTime means)
+timeColumn suit means = text suit // "-----" // column (map showTime means)
 
 showTime :: Maybe Double -> String
 showTime = maybe "" (show . (round :: Double -> Int) . (* 1000000000))
@@ -41,10 +44,10 @@ combineRecords records = (names, map means records) where
   names = S.toAscList $ S.unions $ map (S.fromList . V.toList . V.map fst) records
 
 
-readData :: FilePath -> IO (String, V.Vector Record)
-readData file = do
-  content <- B.readFile ("data" </> file)
-  return (dropExtensions file, decodeRecords content)
+readData :: FilePath -> FilePath -> IO (String, V.Vector Record)
+readData dir file = do
+  content <- B.readFile (dir </> file)
+  return (fst $ splitExtension file, decodeRecords content)
 
 decodeRecords :: B.ByteString -> V.Vector Record
 decodeRecords = either error (V.map unRecord) . C.decode C.HasHeader
