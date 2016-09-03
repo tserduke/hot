@@ -1,9 +1,0 @@
-resolver: lts-6.14
-packages:
-- ../..
-extra-deps: []
-flags:
-  hot:
-    inline: true
-extra-package-dbs: []
-system-ghc: false
