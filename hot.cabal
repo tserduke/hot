@@ -39,7 +39,7 @@ library
                       TypeFamilies
                       UndecidableInstances
   default-extensions: DataKinds
-  ghc-options:        -O2 -Wall -fno-warn-redundant-constraints
+  ghc-options:        -O2 -Wall
 
 test-suite unit
   type:               exitcode-stdio-1.0
@@ -63,6 +63,18 @@ benchmark native
   default-language:   Haskell2010
   default-extensions: DataKinds
   ghc-options:        -O2 -Wall
+
+benchmark llvm-3.5
+  type:               exitcode-stdio-1.0
+  hs-source-dirs:     bench
+  main-is:            Bench.hs
+  build-depends:      base,
+                      criterion,
+                      extra,
+                      hot
+  default-language:   Haskell2010
+  default-extensions: DataKinds
+  ghc-options:        -O2 -Wall -fllvm -pgmlo opt-3.5 -pgmlc llc-3.5
 
 benchmark llvm-3.7
   type:               exitcode-stdio-1.0

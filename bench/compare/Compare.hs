@@ -1,6 +1,7 @@
 module Main (main) where
 
 import Control.Monad (forM)
+import Data.List (sortOn)
 import Data.Maybe (maybe)
 import System.Directory (listDirectory)
 import System.FilePath ((</>), splitExtension)
@@ -16,7 +17,7 @@ main :: IO ()
 main = do
   let dir = "../data"
   files <- listDirectory dir
-  benchmarks <- forM files (readData dir)
+  benchmarks <- fmap (sortOn fst) $ forM files (readData dir)
   putStrLn ""
   let suits = map fst benchmarks
   let (cases, measures) = combineRecords $ map snd benchmarks
