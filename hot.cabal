@@ -56,8 +56,7 @@ benchmark bench
   type:               exitcode-stdio-1.0
   hs-source-dirs:     bench
   main-is:            Bench.hs
-  other-modules:      Data.Hot.GenericBench
-                      Data.Hot.SortBench
+  other-modules:
   build-depends:      base,
                       criterion,
                       extra,
