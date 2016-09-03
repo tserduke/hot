@@ -66,7 +66,7 @@ forN n f = foldr1 (>>) $ map f [1 .. n]
 x +++ y = x ++ " " ++ y
 
 tab :: Int -> Text -> Line ()
-tab n x = Line $ T.replicate n "\t" ++ x
+tab n x = Line $ T.replicate n "   " ++ x
 
 
 newtype Line a = Line { runLines :: Text }
