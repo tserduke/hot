@@ -22,9 +22,9 @@ flag inline
 
 library
   if flag(inline)
-    hs-source-dirs:   src, generate/inline
+    hs-source-dirs:   lib, generate/inline
   else
-    hs-source-dirs:   src, generate/inlinable
+    hs-source-dirs:   lib, generate/inlinable
   exposed-modules:    Data.Hot
                       Data.Hot.Base
                       Data.Hot.Generic
