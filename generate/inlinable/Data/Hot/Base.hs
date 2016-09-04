@@ -6,7 +6,7 @@ import Data.Hot.Internal (hotError)
 import GHC.TypeLits (Nat)
 
 
-class HotClass (n :: Nat) where
+class (Foldable (Hot n)) => HotClass (n :: Nat) where
     data Hot n :: * -> *
     unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)
     size :: Hot n a -> Int
@@ -263,3 +263,44 @@ instance HotClass 10 where
         8 -> Hot10 x1 x2 x3 x4 x5 x6 x7 x8 (f x9) x10
         9 -> Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 (f x10)
         n -> hotError 10 "mapAt" n
+
+
+instance Foldable (Hot 1) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot1 x1) = f x1 z
+
+instance Foldable (Hot 2) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot2 x1 x2) = f x1 (f x2 z)
+
+instance Foldable (Hot 3) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot3 x1 x2 x3) = f x1 (f x2 (f x3 z))
+
+instance Foldable (Hot 4) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot4 x1 x2 x3 x4) = f x1 (f x2 (f x3 (f x4 z)))
+
+instance Foldable (Hot 5) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot5 x1 x2 x3 x4 x5) = f x1 (f x2 (f x3 (f x4 (f x5 z))))
+
+instance Foldable (Hot 6) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot6 x1 x2 x3 x4 x5 x6) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 z)))))
+
+instance Foldable (Hot 7) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot7 x1 x2 x3 x4 x5 x6 x7) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 z))))))
+
+instance Foldable (Hot 8) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 (f x8 z)))))))
+
+instance Foldable (Hot 9) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 (f x8 (f x9 z))))))))
+
+instance Foldable (Hot 10) where
+    {-# INLINABLE foldr #-}
+    foldr f z (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 (f x8 (f x9 (f x10 z)))))))))
