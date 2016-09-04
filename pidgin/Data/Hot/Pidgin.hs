@@ -1,4 +1,4 @@
-module PidginHot where
+module Data.Hot.Pidgin where
 
 
 data PHot2 a = PHot2 !a !a

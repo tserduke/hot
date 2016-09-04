@@ -2,7 +2,7 @@ module Main (main) where
 
 import Criterion.Main
 
-import PidginHot
+import Data.Hot.Pidgin
 
 main :: IO ()
 main = defaultMain $

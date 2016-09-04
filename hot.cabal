@@ -65,8 +65,9 @@ test-suite unit
 
 test-suite pidgin-prop
   type:               exitcode-stdio-1.0
-  hs-source-dirs:     test, bench/micro
+  hs-source-dirs:     test, pidgin
   main-is:            PidginProp.hs
+  other-modules:      Data.Hot.Pidgin
   build-depends:      base,
                       QuickCheck
   default-language:   Haskell2010
@@ -86,9 +87,9 @@ benchmark micro-hot
 
 benchmark micro-pidgin
   type:               exitcode-stdio-1.0
-  hs-source-dirs:     bench/micro
+  hs-source-dirs:     bench/micro, pidgin
   main-is:            PidginBench.hs
-  other-modules:      PidginHot
+  other-modules:      Data.Hot.Pidgin
   build-depends:      base,
                       criterion
   default-language:   Haskell2010
