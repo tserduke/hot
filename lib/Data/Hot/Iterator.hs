@@ -1,15 +1,27 @@
 module Data.Hot.Iterator
   ( Iterator (Iter)
-  , inext
-  , iyield
+  , iterLeft
+  , iterRight
+  , iterNext
+  , iterYield
   ) where
 
 
-data Iterator a = Iter a (Iterator a)
+data Iterator a = Iter !a (Iterator a)
 
 
-inext :: Iterator a -> Iterator a
-inext (Iter _ ix) = ix
+{-# INLINABLE iterLeft #-}
+iterLeft :: (Foldable t) => t a -> Iterator a
+iterLeft = foldl (flip Iter) undefined
 
-iyield :: Iterator a -> a
-iyield (Iter x _) = x
+{-# INLINABLE iterRight #-}
+iterRight :: (Foldable t) => t a -> Iterator a
+iterRight = foldr Iter undefined
+
+{-# INLINABLE iterNext #-}
+iterNext :: Iterator a -> Iterator a
+iterNext (Iter _ ix) = ix
+
+{-# INLINABLE iterYield #-}
+iterYield :: Iterator a -> a
+iterYield (Iter x _) = x
