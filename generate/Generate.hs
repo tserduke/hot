@@ -7,11 +7,11 @@ import qualified Data.Text as T
 main :: IO ()
 main = do
   let n = 10
-  writeFile "inline/Data/Hot/Base.hs" (baseModule inlinePragma n)
-  writeFile "inlinable/Data/Hot/Base.hs" (baseModule inlinablePragma n)
+  writeFile "inline/Data/Hot/Base.hs" $ baseModule (pragmaFunc "INLINE" 1) n
+  writeFile "inlinable/Data/Hot/Base.hs" $ baseModule (pragmaFunc "INLINABLE" 1) n
 
 
-baseModule :: (Text -> Text) -> Int -> Text
+baseModule :: (Text -> Text -> Line ()) -> Int -> Text
 baseModule inline n = runLines $ do
   "{-# LANGUAGE KindSignatures, Rank2Types, TypeFamilies #-}"
   ""
@@ -33,35 +33,30 @@ baseModule inline n = runLines $ do
   forN n (instanceFoldable inline)
 
 
-inlinePragma, inlinablePragma :: Text -> Text
-inlinePragma func = "{-# INLINE" +++ func +++ "#-}"
-inlinablePragma func = "{-# INLINABLE" +++ func +++ "#-}"
+pragmaFunc :: Text -> Int -> Text -> Text -> Line ()
+pragmaFunc pragma ind func body = do
+  tab ind $ "{-#" +++ pragma +++ func +++ "#-}"
+  tab ind $ func +++ body
 
-instanceHot, instanceFoldable  :: (Text -> Text) -> Int -> Line ()
+instanceHot, instanceFoldable  :: (Text -> Text -> Line ()) -> Int -> Line ()
 instanceHot inline n = do
   Line $ "instance HotClass" +++ show n +++ "where"
   dataHot n
-  tab 1 $ inline "unfold"
-  tab 1 $ "unfold f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
-  tab 1 $ inline "iteratorl"
-  tab 1 $ "iteratorl" +++ hotMatching n +++ "= Iter x" ++
+  inline "unfold" $ "f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
+  inline "iteratorl" $ hotMatching n +++ "= Iter x" ++
     T.intercalate " (Iter x" (map show [1 .. n]) +++ "undefined" ++ T.replicate (n - 1) ")"
-  tab 1 $ inline "elementAt"
-  tab 1 $ "elementAt" +++ hotMatching n +++ "= \\case"
+  inline "elementAt" $ hotMatching n +++ "= \\case"
   forN n elementAtCase
   tab 2 $ "n -> hotError" +++ show n +++ "\"elementAt\" n"
-  tab 1 $ inline "mapAt"
-  tab 1 $ "mapAt f" +++ hotMatching n +++ "= \\case"
+  inline "mapAt" $ "f" +++ hotMatching n +++ "= \\case"
   forN n (mapAtCase n)
   tab 2 $ "n -> hotError" +++ show n +++ "\"mapAt\" n"
   ""
 
 instanceFoldable inline n = do
   Line $ "instance Foldable (Hot" +++ show n ++ ") where"
-  tab 1 $ "{-# INLINE length #-}"
-  tab 1 $ "length _ =" +++ show n
-  tab 1 $ inline "foldr"
-  tab 1 $ "foldr f z" +++ hotMatching n +++ "= f x" ++
+  pragmaFunc "INLINE" 1 "length" $ "_ =" +++ show n
+  inline "foldr" $ "f z" +++ hotMatching n +++ "= f x" ++
     T.intercalate " (f x" (map show [1 .. n]) +++ "z" ++ T.replicate (n - 1) ")"
   ""
 
