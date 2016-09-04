@@ -23,7 +23,6 @@ baseModule inline n = runLines $ do
   "class (Foldable (Hot n)) => HotClass (n :: Nat) where"
   tab 1 "data Hot n :: * -> *"
   tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)"
-  tab 1 "size :: Hot n a -> Int"
   tab 1 "elementAt :: Hot n a -> Int -> a"
   tab 1 "mapAt :: (a -> a) -> Hot n a -> Int -> Hot n a"
   "\n"
@@ -42,8 +41,6 @@ instanceHot inline n = do
   dataHot n
   tab 1 $ inline "unfold"
   tab 1 $ "unfold f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
-  tab 1 $ "{-# INLINE size #-}"
-  tab 1 $ "size _ =" +++ show n
   tab 1 $ inline "elementAt"
   tab 1 $ "elementAt" +++ hotMatching n +++ "= \\case"
   forN n elementAtCase
@@ -56,6 +53,8 @@ instanceHot inline n = do
 
 instanceFoldable inline n = do
   Line $ "instance Foldable (Hot" +++ show n ++ ") where"
+  tab 1 $ "{-# INLINE length #-}"
+  tab 1 $ "length _ =" +++ show n
   tab 1 $ inline "foldr"
   tab 1 $ "foldr f z" +++ hotMatching n +++ "= f x" ++
     T.intercalate " (f x" (map show [1 .. n]) +++ "z" ++ T.replicate (n - 1) ")"

@@ -17,7 +17,7 @@ prefix x = runSub $ unfold buildSub $ Sub 0 (elementAt x)
 {-# INLINABLE suffix #-}
 suffix :: forall n m a. (HotClass n, HotClass m, m <= n) => Hot n a -> Hot m a
 suffix x = runSub $ unfold buildSub $ Sub from (elementAt x) where
-  from = size x - size (undefined :: Hot m a)
+  from = length x - length (undefined :: Hot m a)
 
 data Sub a b = Sub !Int (Int -> a) b
 
@@ -30,7 +30,7 @@ runSub (Sub _ _ x) = x
 
 {-# INLINABLE merge #-}
 merge :: (HotClass n, HotClass m, HotClass (n + m), Ord a) => Hot n a -> Hot m a -> Hot (n + m) a
-merge x y = runMerge $ unfold (buildMerge (size x) (size y)) (Merge 0 0 (elementAt x) (elementAt y))
+merge x y = runMerge $ unfold (buildMerge (length x) (length y)) (Merge 0 0 (elementAt x) (elementAt y))
 
 data Merge a b = Merge !Int !Int (Int -> a) (Int -> a) b
 

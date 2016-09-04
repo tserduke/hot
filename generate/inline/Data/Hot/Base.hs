@@ -9,7 +9,6 @@ import GHC.TypeLits (Nat)
 class (Foldable (Hot n)) => HotClass (n :: Nat) where
     data Hot n :: * -> *
     unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)
-    size :: Hot n a -> Int
     elementAt :: Hot n a -> Int -> a
     mapAt :: (a -> a) -> Hot n a -> Int -> Hot n a
 
@@ -19,8 +18,6 @@ instance HotClass 1 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (z Hot1)
-    {-# INLINE size #-}
-    size _ = 1
     {-# INLINE elementAt #-}
     elementAt (Hot1 x1) = \case
         0 -> x1
@@ -35,8 +32,6 @@ instance HotClass 2 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (z Hot2))
-    {-# INLINE size #-}
-    size _ = 2
     {-# INLINE elementAt #-}
     elementAt (Hot2 x1 x2) = \case
         0 -> x1
@@ -53,8 +48,6 @@ instance HotClass 3 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (z Hot3)))
-    {-# INLINE size #-}
-    size _ = 3
     {-# INLINE elementAt #-}
     elementAt (Hot3 x1 x2 x3) = \case
         0 -> x1
@@ -73,8 +66,6 @@ instance HotClass 4 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (f (z Hot4))))
-    {-# INLINE size #-}
-    size _ = 4
     {-# INLINE elementAt #-}
     elementAt (Hot4 x1 x2 x3 x4) = \case
         0 -> x1
@@ -95,8 +86,6 @@ instance HotClass 5 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (f (f (z Hot5)))))
-    {-# INLINE size #-}
-    size _ = 5
     {-# INLINE elementAt #-}
     elementAt (Hot5 x1 x2 x3 x4 x5) = \case
         0 -> x1
@@ -119,8 +108,6 @@ instance HotClass 6 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (f (f (f (z Hot6))))))
-    {-# INLINE size #-}
-    size _ = 6
     {-# INLINE elementAt #-}
     elementAt (Hot6 x1 x2 x3 x4 x5 x6) = \case
         0 -> x1
@@ -145,8 +132,6 @@ instance HotClass 7 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (f (f (f (f (z Hot7)))))))
-    {-# INLINE size #-}
-    size _ = 7
     {-# INLINE elementAt #-}
     elementAt (Hot7 x1 x2 x3 x4 x5 x6 x7) = \case
         0 -> x1
@@ -173,8 +158,6 @@ instance HotClass 8 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (f (f (f (f (f (z Hot8))))))))
-    {-# INLINE size #-}
-    size _ = 8
     {-# INLINE elementAt #-}
     elementAt (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = \case
         0 -> x1
@@ -203,8 +186,6 @@ instance HotClass 9 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (f (f (f (f (f (f (z Hot9)))))))))
-    {-# INLINE size #-}
-    size _ = 9
     {-# INLINE elementAt #-}
     elementAt (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = \case
         0 -> x1
@@ -235,8 +216,6 @@ instance HotClass 10 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINE unfold #-}
     unfold f z = f (f (f (f (f (f (f (f (f (f (z Hot10))))))))))
-    {-# INLINE size #-}
-    size _ = 10
     {-# INLINE elementAt #-}
     elementAt (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = \case
         0 -> x1
@@ -266,41 +245,61 @@ instance HotClass 10 where
 
 
 instance Foldable (Hot 1) where
+    {-# INLINE length #-}
+    length _ = 1
     {-# INLINE foldr #-}
     foldr f z (Hot1 x1) = f x1 z
 
 instance Foldable (Hot 2) where
+    {-# INLINE length #-}
+    length _ = 2
     {-# INLINE foldr #-}
     foldr f z (Hot2 x1 x2) = f x1 (f x2 z)
 
 instance Foldable (Hot 3) where
+    {-# INLINE length #-}
+    length _ = 3
     {-# INLINE foldr #-}
     foldr f z (Hot3 x1 x2 x3) = f x1 (f x2 (f x3 z))
 
 instance Foldable (Hot 4) where
+    {-# INLINE length #-}
+    length _ = 4
     {-# INLINE foldr #-}
     foldr f z (Hot4 x1 x2 x3 x4) = f x1 (f x2 (f x3 (f x4 z)))
 
 instance Foldable (Hot 5) where
+    {-# INLINE length #-}
+    length _ = 5
     {-# INLINE foldr #-}
     foldr f z (Hot5 x1 x2 x3 x4 x5) = f x1 (f x2 (f x3 (f x4 (f x5 z))))
 
 instance Foldable (Hot 6) where
+    {-# INLINE length #-}
+    length _ = 6
     {-# INLINE foldr #-}
     foldr f z (Hot6 x1 x2 x3 x4 x5 x6) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 z)))))
 
 instance Foldable (Hot 7) where
+    {-# INLINE length #-}
+    length _ = 7
     {-# INLINE foldr #-}
     foldr f z (Hot7 x1 x2 x3 x4 x5 x6 x7) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 z))))))
 
 instance Foldable (Hot 8) where
+    {-# INLINE length #-}
+    length _ = 8
     {-# INLINE foldr #-}
     foldr f z (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 (f x8 z)))))))
 
 instance Foldable (Hot 9) where
+    {-# INLINE length #-}
+    length _ = 9
     {-# INLINE foldr #-}
     foldr f z (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 (f x8 (f x9 z))))))))
 
 instance Foldable (Hot 10) where
+    {-# INLINE length #-}
+    length _ = 10
     {-# INLINE foldr #-}
     foldr f z (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = f x1 (f x2 (f x3 (f x4 (f x5 (f x6 (f x7 (f x8 (f x9 (f x10 z)))))))))
