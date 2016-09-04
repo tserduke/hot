@@ -57,7 +57,8 @@ instanceHot inline n = do
 instanceFoldable inline n = do
   Line $ "instance Foldable (Hot" +++ show n ++ ") where"
   tab 1 $ inline "foldr"
-  tab 1 $ "foldr f z" +++ hotMatching n +++ "=" +++ concat (map (\i -> "f x" ++ i +++ "(") $ map show [1 .. n - 1]) ++ "f x" ++ show n +++ "z" ++ T.replicate (n - 1) ")"
+  tab 1 $ "foldr f z" +++ hotMatching n +++ "= f x" ++
+    T.intercalate " (f x" (map show [1 .. n]) +++ "z" ++ T.replicate (n - 1) ")"
   ""
 
 
