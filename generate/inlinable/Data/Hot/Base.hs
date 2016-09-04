@@ -3,14 +3,12 @@
 module Data.Hot.Base where
 
 import Data.Hot.Internal (hotError)
-import Data.Hot.Iterator (Iterator (Iter))
 import GHC.TypeLits (Nat)
 
 
 class (Foldable (Hot n)) => HotClass (n :: Nat) where
     data Hot n :: * -> *
     unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)
-    iteratorl :: Hot n a -> Iterator a
     elementAt :: Hot n a -> Int -> a
     mapAt :: (a -> a) -> Hot n a -> Int -> Hot n a
 
@@ -20,8 +18,6 @@ instance HotClass 1 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (z Hot1)
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot1 x1) = Iter x1 undefined
     {-# INLINABLE elementAt #-}
     elementAt (Hot1 x1) = \case
         0 -> x1
@@ -36,8 +32,6 @@ instance HotClass 2 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (z Hot2))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot2 x1 x2) = Iter x1 (Iter x2 undefined)
     {-# INLINABLE elementAt #-}
     elementAt (Hot2 x1 x2) = \case
         0 -> x1
@@ -54,8 +48,6 @@ instance HotClass 3 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (z Hot3)))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot3 x1 x2 x3) = Iter x1 (Iter x2 (Iter x3 undefined))
     {-# INLINABLE elementAt #-}
     elementAt (Hot3 x1 x2 x3) = \case
         0 -> x1
@@ -74,8 +66,6 @@ instance HotClass 4 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (f (z Hot4))))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot4 x1 x2 x3 x4) = Iter x1 (Iter x2 (Iter x3 (Iter x4 undefined)))
     {-# INLINABLE elementAt #-}
     elementAt (Hot4 x1 x2 x3 x4) = \case
         0 -> x1
@@ -96,8 +86,6 @@ instance HotClass 5 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (f (f (z Hot5)))))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot5 x1 x2 x3 x4 x5) = Iter x1 (Iter x2 (Iter x3 (Iter x4 (Iter x5 undefined))))
     {-# INLINABLE elementAt #-}
     elementAt (Hot5 x1 x2 x3 x4 x5) = \case
         0 -> x1
@@ -120,8 +108,6 @@ instance HotClass 6 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (f (f (f (z Hot6))))))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot6 x1 x2 x3 x4 x5 x6) = Iter x1 (Iter x2 (Iter x3 (Iter x4 (Iter x5 (Iter x6 undefined)))))
     {-# INLINABLE elementAt #-}
     elementAt (Hot6 x1 x2 x3 x4 x5 x6) = \case
         0 -> x1
@@ -146,8 +132,6 @@ instance HotClass 7 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (f (f (f (f (z Hot7)))))))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot7 x1 x2 x3 x4 x5 x6 x7) = Iter x1 (Iter x2 (Iter x3 (Iter x4 (Iter x5 (Iter x6 (Iter x7 undefined))))))
     {-# INLINABLE elementAt #-}
     elementAt (Hot7 x1 x2 x3 x4 x5 x6 x7) = \case
         0 -> x1
@@ -174,8 +158,6 @@ instance HotClass 8 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (f (f (f (f (f (z Hot8))))))))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = Iter x1 (Iter x2 (Iter x3 (Iter x4 (Iter x5 (Iter x6 (Iter x7 (Iter x8 undefined)))))))
     {-# INLINABLE elementAt #-}
     elementAt (Hot8 x1 x2 x3 x4 x5 x6 x7 x8) = \case
         0 -> x1
@@ -204,8 +186,6 @@ instance HotClass 9 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (f (f (f (f (f (f (z Hot9)))))))))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = Iter x1 (Iter x2 (Iter x3 (Iter x4 (Iter x5 (Iter x6 (Iter x7 (Iter x8 (Iter x9 undefined))))))))
     {-# INLINABLE elementAt #-}
     elementAt (Hot9 x1 x2 x3 x4 x5 x6 x7 x8 x9) = \case
         0 -> x1
@@ -236,8 +216,6 @@ instance HotClass 10 where
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
     unfold f z = f (f (f (f (f (f (f (f (f (f (z Hot10))))))))))
-    {-# INLINABLE iteratorl #-}
-    iteratorl (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = Iter x1 (Iter x2 (Iter x3 (Iter x4 (Iter x5 (Iter x6 (Iter x7 (Iter x8 (Iter x9 (Iter x10 undefined)))))))))
     {-# INLINABLE elementAt #-}
     elementAt (Hot10 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10) = \case
         0 -> x1
