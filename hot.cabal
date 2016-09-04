@@ -71,10 +71,10 @@ test-suite pidgin-prop
                       Data.Hot.Pidgin.Base
                       Data.Hot.Pidgin.Misc
   build-depends:      base,
-                      extra,
                       QuickCheck
   default-language:   Haskell2010
-  default-extensions: ScopedTypeVariables
+  default-extensions: FlexibleContexts
+                      ScopedTypeVariables
   other-extensions:   DataKinds
                       KindSignatures
                       TypeFamilies
