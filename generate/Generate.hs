@@ -18,11 +18,13 @@ baseModule inline n = runLines $ do
   "module Data.Hot.Base where"
   ""
   "import Data.Hot.Internal (hotError)"
+  "import Data.Hot.Iterator (Iterator (Iter))"
   "import GHC.TypeLits (Nat)"
   "\n"
   "class (Foldable (Hot n)) => HotClass (n :: Nat) where"
   tab 1 "data Hot n :: * -> *"
   tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)"
+  tab 1 "iteratorl :: Hot n a -> Iterator a"
   tab 1 "elementAt :: Hot n a -> Int -> a"
   tab 1 "mapAt :: (a -> a) -> Hot n a -> Int -> Hot n a"
   "\n"
@@ -41,6 +43,9 @@ instanceHot inline n = do
   dataHot n
   tab 1 $ inline "unfold"
   tab 1 $ "unfold f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
+  tab 1 $ inline "iteratorl"
+  tab 1 $ "iteratorl" +++ hotMatching n +++ "= Iter x" ++
+    T.intercalate " (Iter x" (map show [1 .. n]) +++ "undefined" ++ T.replicate (n - 1) ")"
   tab 1 $ inline "elementAt"
   tab 1 $ "elementAt" +++ hotMatching n +++ "= \\case"
   forN n elementAtCase

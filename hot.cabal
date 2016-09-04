@@ -27,6 +27,7 @@ library
   exposed-modules:    Data.Hot
                       Data.Hot.Base
                       Data.Hot.Generic
+                      Data.Hot.Iterator
                       Data.Hot.Sort
   other-modules:      Data.Hot.Internal
   build-depends:      base
