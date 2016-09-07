@@ -7,6 +7,7 @@ module Data.Hot.Generic
   ) where
 
 import Data.Hot.Base
+
 import GHC.TypeLits
 
 
