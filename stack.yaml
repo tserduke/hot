@@ -4,7 +4,6 @@ packages:
 - base
 - instances
 - lib/classy
-- lib/default
-#- lib/indexed
+- lib/indexed
 #- lib/iteratable
 system-ghc: false
