@@ -1,8 +1,10 @@
 resolver: lts-6.15
 packages:
+#- build
 - base
 - instances
+- lib/classy
 - lib/default
-#- impl/iteratable
-#- impl/classy
+#- lib/indexed
+#- lib/iteratable
 system-ghc: false

@@ -16,37 +16,8 @@ cabal-version:        >= 1.10
 extra-source-files:   README.md
 
 source-repository head
-  type:     git
-  location: https://github.com/tserduke/hot.git
-
-
-test-suite unit
-  type:               exitcode-stdio-1.0
-  hs-source-dirs:     test
-  main-is:            Unit.hs
-  build-depends:      base,
-                      hot,
-                      hspec
-  default-language:   Haskell2010
-  default-extensions: DataKinds
-  ghc-options:        -O2 -Wall -with-rtsopts=-K1K
-
-test-suite pidgin-prop
-  type:               exitcode-stdio-1.0
-  hs-source-dirs:     test, pidgin
-  main-is:            PidginProp.hs
-  other-modules:      Data.Hot.Pidgin
-                      Data.Hot.Pidgin.Base
-                      Data.Hot.Pidgin.Misc
-  build-depends:      base,
-                      QuickCheck
-  default-language:   Haskell2010
-  default-extensions: FlexibleContexts
-                      ScopedTypeVariables
-  other-extensions:   DataKinds
-                      KindSignatures
-                      TypeFamilies
-  ghc-options:        -O2 -Wall -with-rtsopts=-K1K
+  type:               git
+  location:           https://github.com/tserduke/hot.git
 
 
 benchmark micro-hot
