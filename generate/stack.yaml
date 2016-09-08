@@ -1,7 +1,4 @@
-resolver: lts-6.14
-packages:
-- .
-extra-deps: []
-flags: {}
-extra-package-dbs: []
+resolver: lts-6.15
+extra-deps:
+- do-list-0.9.0
 system-ghc: false

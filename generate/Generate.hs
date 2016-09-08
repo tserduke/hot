@@ -1,6 +1,7 @@
 module Main (main) where
 
 import BasicPrelude
+import Data.DoList (DoList, item, toList)
 import qualified Data.Text as T
 
 
@@ -11,7 +12,7 @@ main = do
   writeFile "inlinable/Data/Hot/Base.hs" $ baseModule (pragmaFunc "INLINABLE" 1) n
 
 
-baseModule :: (Text -> Text -> Line ()) -> Int -> Text
+baseModule :: (Text -> Text -> Line) -> Int -> Text
 baseModule inline n = runLines $ do
   "{-# LANGUAGE KindSignatures, Rank2Types, TypeFamilies #-}"
   ""
@@ -31,14 +32,14 @@ baseModule inline n = runLines $ do
   forN n (instanceFoldable inline)
 
 
-pragmaFunc :: Text -> Int -> Text -> Text -> Line ()
+pragmaFunc :: Text -> Int -> Text -> Text -> Line
 pragmaFunc pragma ind func body = do
   tab ind $ "{-#" +++ pragma +++ func +++ "#-}"
   tab ind $ func +++ body
 
-instanceHot, instanceFoldable  :: (Text -> Text -> Line ()) -> Int -> Line ()
+instanceHot, instanceFoldable  :: (Text -> Text -> Line) -> Int -> Line
 instanceHot inline n = do
-  Line $ "instance HotClass" +++ show n +++ "where"
+  line $ "instance HotClass" +++ show n +++ "where"
   dataHot n
   inline "unfold" $ "f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
   inline "elementAt" $ hotMatching n +++ "= \\case"
@@ -50,21 +51,21 @@ instanceHot inline n = do
   ""
 
 instanceFoldable inline n = do
-  Line $ "instance Foldable (Hot" +++ show n ++ ") where"
+  line $ "instance Foldable (Hot" +++ show n ++ ") where"
   pragmaFunc "INLINE" 1 "length" $ "_ =" +++ show n
   inline "foldr" $ "f z" +++ hotMatching n +++ "= f x" ++
     T.intercalate " (f x" (map show [1 .. n]) +++ "z" ++ T.replicate (n - 1) ")"
   ""
 
 
-dataHot, elementAtCase :: Int -> Line ()
+dataHot, elementAtCase :: Int -> Line
 dataHot n = do
   tab 1 $ "data Hot" +++ show n +++ "a =" +++ hotConstr n (const "!a")
   tab 2 $ "deriving (Eq, Ord, Read, Show)"
 
 elementAtCase i = tab 2 $ show (i - 1) +++ "-> x" ++ show i
 
-mapAtCase :: Int -> Int -> Line ()
+mapAtCase :: Int -> Int -> Line
 mapAtCase n i = tab 2 $ show (i - 1) +++ "->" +++ hotConstr n f where
   f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
 
@@ -81,20 +82,14 @@ forN n f = foldr1 (>>) $ map f [1 .. n]
 (+++) :: Text -> Text -> Text
 x +++ y = x ++ " " ++ y
 
-tab :: Int -> Text -> Line ()
-tab n x = Line $ T.replicate n "    " ++ x
+tab :: Int -> Text -> Line
+tab n x = line $ T.replicate n "    " ++ x
 
 
-newtype Line a = Line { runLines :: Text }
-  deriving (IsString, Monoid)
+type Line = DoList Text ()
 
-instance Functor Line where
-  fmap = undefined
+line :: Text -> Line
+line = item
 
-instance Applicative Line where
-  pure = undefined
-  (<*>) = undefined
-
-instance Monad Line where
-  (>>=) = undefined
-  (Line x) >> (Line y) = Line $ x ++ "\n" ++ y
+runLines :: Line -> Text
+runLines = unlines . toList
