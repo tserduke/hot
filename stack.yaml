@@ -6,4 +6,6 @@ packages:
 - lib/classy
 - lib/indexed
 - lib/iterative
+- bench
+- cmp
 system-ghc: false

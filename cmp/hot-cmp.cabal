@@ -1,0 +1,23 @@
+name:                 hot-cmp
+version:              0.1.0
+build-type:           Simple
+cabal-version:        >= 1.10
+
+executable hot-cmp-hot
+  hs-source-dirs:     .
+  main-is:            Hot.hs
+  build-depends:      base,
+                      criterion,
+                      hot-classy
+  default-language:   Haskell2010
+  default-extensions: DataKinds
+  ghc-options:        -O2 -Wall
+
+executable hot-cmp-list
+  hs-source-dirs:     .
+  main-is:            List.hs
+  build-depends:      base,
+                      criterion,
+                      extra
+  default-language:   Haskell2010
+  ghc-options:        -O2 -Wall
