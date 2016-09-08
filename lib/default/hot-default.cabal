@@ -26,4 +26,4 @@ library
   other-extensions:   InstanceSigs
                       TypeFamilies
                       UndecidableInstances
-  ghc-options:        -Wall
+  ghc-options:        -O2 -Wall
