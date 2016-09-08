@@ -5,6 +5,7 @@ cabal-version:        >= 1.10
 
 library
   hs-source-dirs:     .
+                      ../common
   exposed-modules:    Data.Hot
                       Data.Hot.Generic
                       Data.Hot.Sort
