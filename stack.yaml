@@ -1,7 +1,8 @@
-resolver: lts-6.14
+resolver: lts-6.15
 packages:
-- .
-extra-deps: []
-flags: {}
-extra-package-dbs: []
+- base
+- instances
+- lib/default
+#- impl/iteratable
+#- impl/classy
 system-ghc: false

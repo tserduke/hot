@@ -7,6 +7,7 @@ module Data.Hot.Sort
   ) where
 
 import Data.Hot.Base
+import Data.Hot.Instances
 import Data.Hot.Generic
 import GHC.TypeLits
 
