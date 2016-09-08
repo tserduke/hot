@@ -24,9 +24,6 @@ library
                       TupleSections
                       TypeOperators
   other-extensions:   InstanceSigs
-                      KindSignatures
-                      Rank2Types
                       TypeFamilies
                       UndecidableInstances
-  default-extensions: DataKinds
   ghc-options:        -Wall

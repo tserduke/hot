@@ -1,4 +1,4 @@
-{-# LANGUAGE KindSignatures, Rank2Types, TypeFamilies #-}
+{-# LANGUAGE TypeFamilies #-}
 
 module Data.Hot.Instances where
 

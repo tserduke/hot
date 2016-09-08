@@ -9,20 +9,9 @@ library
                       Data.Hot.Internal
   build-depends:      base
   default-language:   Haskell2010
-  default-extensions: BangPatterns
-                      DataKinds
+  default-extensions: DataKinds
                       FlexibleContexts
-                      FlexibleInstances
-                      LambdaCase
-                      MultiParamTypeClasses
-                      MultiWayIf
-                      ScopedTypeVariables
-                      TupleSections
-                      TypeOperators
-  other-extensions:   InstanceSigs
-                      KindSignatures
+  other-extensions:   KindSignatures
                       Rank2Types
                       TypeFamilies
-                      UndecidableInstances
-  default-extensions: DataKinds
   ghc-options:        -Wall
