@@ -1,10 +1,10 @@
-name:                 generate
-version:              0.1.0
+name:                 hot-instances-src
+version:              0.2.0
 build-type:           Simple
 cabal-version:        >= 1.10
 
 executable generate
-  hs-source-dirs:     .
+  hs-source-dirs:     src
   main-is:            Generate.hs
   other-modules:
   build-depends:      base,
