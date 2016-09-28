@@ -4,8 +4,16 @@ import Common
 import Data.List (intercalate)
 
 
+foldableModule :: Lines
+foldableModule = do
+    "module Data.Hot.Instances.Foldable where"
+    ""
+    "import Data.Hot.Instances.Base"
+    "\n"
+
+
 instanceFoldable :: Function -> Int -> Lines
-instanceFoldable inline n = do
+instanceFoldable inline x = forN x $ \n -> do
     ["instance Foldable (Hot" +++ show n ++ ") where"]
     indent $ do
         pragmaFunc "INLINE" "length" $ "_ =" +++ show n

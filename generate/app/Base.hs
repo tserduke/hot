@@ -1,24 +1,21 @@
-module Base (baseModule) where
+module Base where
 
 import Common
-import Foldable
 
 
-baseModule :: Function -> Int -> Text
-baseModule inline n = runLines $ do
+baseModule :: Lines
+baseModule = do
     "{-# LANGUAGE TypeFamilies #-}"
     ""
-    "module Data.Hot.Instances where"
+    "module Data.Hot.Instances.Base where"
     ""
     "import Data.Hot.Base"
     "import Data.Hot.Internal (hotError)"
     "\n"
-    forN n (instanceHot inline)
-    ""
-    forN n (instanceFoldable inline)
 
-instanceHot :: Function -> Int -> Lines
-instanceHot inline n = do
+
+instanceBase :: Function -> Int -> Lines
+instanceBase inline x = forN x $ \n -> do
     ["instance HotClass" +++ show n +++ "where"]
     indent $ do
         dataHot n
