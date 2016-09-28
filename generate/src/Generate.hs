@@ -1,9 +1,10 @@
 module Main (main) where
 
-import BasicPrelude
 import Data.DoList (DoList, item, toList)
-import qualified Data.Text as T
+import Data.List (intercalate)
 
+
+type Text = String
 
 main :: IO ()
 main = do
@@ -41,7 +42,7 @@ instanceHot, instanceFoldable  :: (Text -> Text -> Line) -> Int -> Line
 instanceHot inline n = do
   line $ "instance HotClass" +++ show n +++ "where"
   dataHot n
-  inline "unfold" $ "f z =" +++ T.replicate n "f (" ++ "z Hot" ++ show n ++ T.replicate n ")"
+  inline "unfold" $ "f z =" +++ concat (replicate n "f (") ++ "z Hot" ++ show n ++ replicate n ')'
   inline "elementAt" $ hotMatching n +++ "= \\case"
   forN n elementAtCase
   tab 2 $ "n -> hotError" +++ show n +++ "\"elementAt\" n"
@@ -54,14 +55,14 @@ instanceFoldable inline n = do
   line $ "instance Foldable (Hot" +++ show n ++ ") where"
   pragmaFunc "INLINE" 1 "length" $ "_ =" +++ show n
   inline "foldr" $ "f z" +++ hotMatching n +++ "= f x" ++
-    T.intercalate " (f x" (map show [1 .. n]) +++ "z" ++ T.replicate (n - 1) ")"
+    intercalate " (f x" (map show [1 .. n]) +++ "z" ++ replicate (n - 1) ')'
   ""
 
 
 dataHot, elementAtCase :: Int -> Line
 dataHot n = do
   tab 1 $ "data Hot" +++ show n +++ "a =" +++ hotConstr n (const "!a")
-  tab 2 $ "deriving (Eq, Ord, Read, Show)"
+  tab 2 "deriving (Eq, Ord, Read, Show)"
 
 elementAtCase i = tab 2 $ show (i - 1) +++ "-> x" ++ show i
 
@@ -83,10 +84,10 @@ forN n f = foldr1 (>>) $ map f [1 .. n]
 x +++ y = x ++ " " ++ y
 
 tab :: Int -> Text -> Line
-tab n x = line $ T.replicate n "    " ++ x
+tab n x = line $ concat (replicate n "    ") ++ x
 
 
-type Line = DoList Text ()
+type Line = DoList Text
 
 line :: Text -> Line
 line = item

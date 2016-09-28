@@ -8,9 +8,7 @@ executable generate
   main-is:            Generate.hs
   other-modules:
   build-depends:      base,
-                      basic-prelude,
-                      do-list,
-                      text
+                      do-list
   default-language:   Haskell2010
   default-extensions: BangPatterns
                       FlexibleContexts
@@ -18,7 +16,6 @@ executable generate
                       GeneralizedNewtypeDeriving
                       LambdaCase
                       MultiParamTypeClasses
-                      NoImplicitPrelude
                       OverloadedStrings
                       ScopedTypeVariables
                       TupleSections
