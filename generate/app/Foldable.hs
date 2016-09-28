@@ -4,9 +4,9 @@ import Common
 import Data.List (intercalate)
 
 
-instanceFoldable :: (Text -> Text -> Line) -> Int -> Line
+instanceFoldable :: Function -> Int -> Lines
 instanceFoldable inline n = do
-    line $ "instance Foldable (Hot" +++ show n ++ ") where"
+    ["instance Foldable (Hot" +++ show n ++ ") where"]
     indent $ do
         pragmaFunc "INLINE" "length" $ "_ =" +++ show n
         inline "foldr" $ "f z" +++ hotMatching n +++ "= f x" ++

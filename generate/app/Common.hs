@@ -1,16 +1,18 @@
 module Common where
 
-import Data.DoList (DoList, fromList, item, toList)
+import Data.DoList (DoList, fromList, toList)
 
 
 type Text = String
-type Line = DoList Text
+type Lines = DoList Text
+
+type Function = Text -> Text -> Lines
 
 
-pragmaFunc :: Text -> Text -> Text -> Line
+pragmaFunc :: Text -> Function
 pragmaFunc pragma func body = do
-    line $ "{-#" +++ pragma +++ func +++ "#-}"
-    line $ func +++ body
+    ["{-#" +++ pragma +++ func +++ "#-}"]
+    [func +++ body]
 
 
 hotMatching :: Int -> Text
@@ -20,11 +22,8 @@ hotConstr :: Int -> (Int -> Text) -> Text
 hotConstr n f = "Hot" ++ show n +++ unwords (map f [1 .. n])
 
 
-line :: Text -> Line
-line = item
-
-runLines :: Line -> Text
-runLines = unlines . toList
+indent :: Lines -> Lines
+indent = fromList . map ("    " ++) . toList
 
 forN :: (Monad m) => Int -> (Int -> m a) -> m a
 forN n f = foldr1 (>>) $ map f [1 .. n]
@@ -32,5 +31,6 @@ forN n f = foldr1 (>>) $ map f [1 .. n]
 (+++) :: Text -> Text -> Text
 x +++ y = x ++ " " ++ y
 
-indent :: Line -> Line
-indent = fromList . map ("    " ++) . toList
+
+runLines :: Lines -> Text
+runLines = unlines . toList
