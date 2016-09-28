@@ -10,13 +10,5 @@ executable generate
   build-depends:      base,
                       do-list
   default-language:   Haskell2010
-  default-extensions: BangPatterns
-                      FlexibleContexts
-                      FlexibleInstances
-                      GeneralizedNewtypeDeriving
-                      LambdaCase
-                      MultiParamTypeClasses
-                      OverloadedStrings
-                      ScopedTypeVariables
-                      TupleSections
+  default-extensions: OverloadedStrings
   ghc-options:        -Wall -fno-warn-unused-do-bind

@@ -28,8 +28,8 @@ baseModule inline n = runLines $ do
 
 pragmaFunc :: Text -> Text -> Text -> Line
 pragmaFunc pragma func body = do
-    item $ "{-#" +++ pragma +++ func +++ "#-}"
-    item $ func +++ body
+    line $ "{-#" +++ pragma +++ func +++ "#-}"
+    line $ func +++ body
 
 instanceHot, instanceFoldable :: (Text -> Text -> Line) -> Int -> Line
 instanceHot inline n = do
@@ -40,11 +40,11 @@ instanceHot inline n = do
         inline "elementAt" $ hotMatching n +++ "= \\case"
         indent $ do
             forN n elementAtCase
-            item $ "n -> hotError" +++ show n +++ "\"elementAt\" n"
+            line $ "n -> hotError" +++ show n +++ "\"elementAt\" n"
         inline "mapAt" $ "f" +++ hotMatching n +++ "= \\case"
         indent $ do
             forN n (mapAtCase n)
-            item $ "n -> hotError" +++ show n +++ "\"mapAt\" n"
+            line $ "n -> hotError" +++ show n +++ "\"mapAt\" n"
     ""
 
 instanceFoldable inline n = do
@@ -58,13 +58,13 @@ instanceFoldable inline n = do
 
 dataHot, elementAtCase :: Int -> Line
 dataHot n = do
-    item $ "data Hot" +++ show n +++ "a =" +++ hotConstr n (const "!a")
+    line $ "data Hot" +++ show n +++ "a =" +++ hotConstr n (const "!a")
     indent "deriving (Eq, Ord, Read, Show)"
 
-elementAtCase i = item $ show (i - 1) +++ "-> x" ++ show i
+elementAtCase i = line $ show (i - 1) +++ "-> x" ++ show i
 
 mapAtCase :: Int -> Int -> Line
-mapAtCase n i = item $ show (i - 1) +++ "->" +++ hotConstr n f where
+mapAtCase n i = line $ show (i - 1) +++ "->" +++ hotConstr n f where
     f j = if j == i then "(f x" ++ show j ++ ")" else "x" ++ show j
 
 hotMatching :: Int -> Text
