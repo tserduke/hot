@@ -9,24 +9,17 @@ type Text = String
 main :: IO ()
 main = do
   let n = 10
-  writeFile "inline/Data/Hot/Base.hs" $ baseModule (pragmaFunc "INLINE" 1) n
-  writeFile "inlinable/Data/Hot/Base.hs" $ baseModule (pragmaFunc "INLINABLE" 1) n
+  writeFile "../instances/Data/Hot/Instances.hs" $ baseModule (pragmaFunc "INLINABLE" 1) n
 
 
 baseModule :: (Text -> Text -> Line) -> Int -> Text
 baseModule inline n = runLines $ do
-  "{-# LANGUAGE KindSignatures, Rank2Types, TypeFamilies #-}"
+  "{-# LANGUAGE TypeFamilies #-}"
   ""
-  "module Data.Hot.Base where"
+  "module Data.Hot.Instances where"
   ""
+  "import Data.Hot.Base"
   "import Data.Hot.Internal (hotError)"
-  "import GHC.TypeLits (Nat)"
-  "\n"
-  "class (Foldable (Hot n)) => HotClass (n :: Nat) where"
-  tab 1 "data Hot n :: * -> *"
-  tab 1 "unfold :: (forall r. c (a -> r) -> c r) -> (forall r. r -> c r) -> c (Hot n a)"
-  tab 1 "elementAt :: Hot n a -> Int -> a"
-  tab 1 "mapAt :: (a -> a) -> Hot n a -> Int -> Hot n a"
   "\n"
   forN n (instanceHot inline)
   ""
