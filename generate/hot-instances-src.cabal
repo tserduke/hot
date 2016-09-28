@@ -1,14 +1,16 @@
-name:                 hot-instances-src
-version:              0.2.0
-build-type:           Simple
-cabal-version:        >= 1.10
+name:                   hot-instances-src
+version:                0.3.0
+build-type:             Simple
+cabal-version:          >= 1.10
 
 executable generate
-  hs-source-dirs:     src
-  main-is:            Generate.hs
-  other-modules:
-  build-depends:      base,
-                      do-list
-  default-language:   Haskell2010
-  default-extensions: OverloadedStrings
-  ghc-options:        -Wall -fno-warn-unused-do-bind
+    hs-source-dirs:     app
+    main-is:            Main.hs
+    other-modules:      Common
+                        Base
+                        Foldable
+    build-depends:      base,
+                        do-list
+    default-language:   Haskell2010
+    default-extensions: OverloadedStrings
+    ghc-options:        -Wall -fno-warn-unused-do-bind
