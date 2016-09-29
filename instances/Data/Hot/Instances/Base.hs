@@ -6,7 +6,7 @@ import Data.Hot.Base
 import Data.Hot.Internal (hotError)
 
 
-instance HotClass 1 where
+instance HotBase 1 where
     data Hot 1 a = Hot1 !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -20,7 +20,7 @@ instance HotClass 1 where
         0 -> Hot1 (f x1)
         x -> hotError 1 "mapAt" x
 
-instance HotClass 2 where
+instance HotBase 2 where
     data Hot 2 a = Hot2 !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -36,7 +36,7 @@ instance HotClass 2 where
         1 -> Hot2 x1 (f x2)
         x -> hotError 2 "mapAt" x
 
-instance HotClass 3 where
+instance HotBase 3 where
     data Hot 3 a = Hot3 !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -54,7 +54,7 @@ instance HotClass 3 where
         2 -> Hot3 x1 x2 (f x3)
         x -> hotError 3 "mapAt" x
 
-instance HotClass 4 where
+instance HotBase 4 where
     data Hot 4 a = Hot4 !a !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -74,7 +74,7 @@ instance HotClass 4 where
         3 -> Hot4 x1 x2 x3 (f x4)
         x -> hotError 4 "mapAt" x
 
-instance HotClass 5 where
+instance HotBase 5 where
     data Hot 5 a = Hot5 !a !a !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -96,7 +96,7 @@ instance HotClass 5 where
         4 -> Hot5 x1 x2 x3 x4 (f x5)
         x -> hotError 5 "mapAt" x
 
-instance HotClass 6 where
+instance HotBase 6 where
     data Hot 6 a = Hot6 !a !a !a !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -120,7 +120,7 @@ instance HotClass 6 where
         5 -> Hot6 x1 x2 x3 x4 x5 (f x6)
         x -> hotError 6 "mapAt" x
 
-instance HotClass 7 where
+instance HotBase 7 where
     data Hot 7 a = Hot7 !a !a !a !a !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -146,7 +146,7 @@ instance HotClass 7 where
         6 -> Hot7 x1 x2 x3 x4 x5 x6 (f x7)
         x -> hotError 7 "mapAt" x
 
-instance HotClass 8 where
+instance HotBase 8 where
     data Hot 8 a = Hot8 !a !a !a !a !a !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -174,7 +174,7 @@ instance HotClass 8 where
         7 -> Hot8 x1 x2 x3 x4 x5 x6 x7 (f x8)
         x -> hotError 8 "mapAt" x
 
-instance HotClass 9 where
+instance HotBase 9 where
     data Hot 9 a = Hot9 !a !a !a !a !a !a !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}
@@ -204,7 +204,7 @@ instance HotClass 9 where
         8 -> Hot9 x1 x2 x3 x4 x5 x6 x7 x8 (f x9)
         x -> hotError 9 "mapAt" x
 
-instance HotClass 10 where
+instance HotBase 10 where
     data Hot 10 a = Hot10 !a !a !a !a !a !a !a !a !a !a
         deriving (Eq, Ord, Read, Show)
     {-# INLINABLE unfold #-}

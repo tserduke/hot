@@ -1,5 +1,6 @@
 packages:
 #- build
+- gen
 - base
 - instances
 - lib/classy

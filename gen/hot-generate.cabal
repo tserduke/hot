@@ -1,10 +1,10 @@
-name:                   hot-instances-src
+name:                   hot-generate
 version:                0.3.0
 build-type:             Simple
 cabal-version:          >= 1.10
 
-executable generate
-    hs-source-dirs:     app
+executable hot-generate
+    hs-source-dirs:     .
     main-is:            Main.hs
     other-modules:      Common
                         Base

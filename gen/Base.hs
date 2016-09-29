@@ -13,7 +13,7 @@ baseModule inline l = runLines $ do
     "import Data.Hot.Internal (hotError)"
     "\n"
     forN l $ \n -> do
-        ["instance HotClass" +++ show n +++ "where"]
+        ["instance HotBase" +++ show n +++ "where"]
         indent $ do
             dataHot n
             inline "unfold" $ "f z =" +++
